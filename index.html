@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서하 & 서준 방학 대시보드</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap');
+        body { font-family: 'Gaegu', cursive; background-color: #fff9eb; margin: 0; padding: 15px; display: flex; justify-content: center; }
+        .container { background: white; width: 100%; max-width: 500px; border-radius: 30px; padding: 25px; border: 6px solid #ffcbef; box-shadow: 0 10px 0 #ff9ff3; position: relative; }
+        
+        /* 메인 고양이 아이콘 (로케트 대신) */
+        .main-cat { width: 80px; display: block; margin: 0 auto 10px; }
+        
+        .header h1 { text-align: center; color: #6c5ce7; font-size: 2.2rem; margin: 10px 0; }
+        .rule-box { background: #fff5f5; border: 2px solid #ff7675; border-radius: 15px; padding: 15px; margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; }
+        
+        /* 아이들 선택 버튼 (고양이 크게, 얼굴 삭제) */
+        .child-selector { display: flex; gap: 15px; margin-bottom: 20px; }
+        .btn-child { flex: 1; padding: 20px 10px; border: none; border-radius: 25px; font-size: 1.6rem; font-family: 'Gaegu'; cursor: pointer; background: #f0f0f0; transition: 0.3s; }
+        .btn-child img { width: 100px; height: auto; margin-bottom: 10px; border-radius: 15px; }
+        .btn-child.active.seoha { background: #ff9ff3; color: white; box-shadow: 0 5px 0 #ef87e5; }
+        .btn-child.active.seojun { background: #48dbfb; color: white; box-shadow: 0 5px 0 #34c0e2; }
+
+        .time-box { background: #2d3436; color: #55efc4; border-radius: 25px; padding: 20px; text-align: center; margin-bottom: 20px; border: 4px solid #636e72; }
+        .time-display { font-size: 4rem; font-weight: bold; }
+        
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: #f9f9f9; padding: 10px; border-radius: 15px; border: 2px solid #ddd; margin-bottom: 20px; }
+        .day { height: 50px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #eee; position: relative; font-size: 1.2rem; }
+        .day.vacation { background: #e3f2fd; border: 2px solid #2196f3; }
+        .day.weekend { background: #fff0f0; color: #ff7675; }
+        .day.selected { background: #feca57 !important; color: white; border: 3px solid #f39c12; }
+        .day.has-data::after { content: '🐾'; position: absolute; top: 2px; right: 2px; font-size: 0.7rem; }
+
+        .bonus-section { background: #fdf9ff; padding: 20px; border-radius: 25px; border: 3px dashed #a29bfe; }
+        .book-row { display: grid; grid-template-columns: 30px 2fr 1fr; gap: 8px; margin-bottom: 10px; align-items: center; }
+        input, textarea { padding: 12px; border: 2px solid #ddd; border-radius: 12px; font-family: 'Gaegu'; font-size: 1.1rem; width: 100%; box-sizing: border-box; }
+        .calc-btn { width: 100%; padding: 20px; background: #6c5ce7; color: white; border: none; border-radius: 25px; font-size: 1.8rem; font-family: 'Gaegu'; cursor: pointer; margin-top: 15px; box-shadow: 0 5px 0 #5849c4; }
+    </style>
+</head>
+<body onload="init()">
+
+<div class="container">
+    <img src="file (45).png" class="main-cat"> <div class="header"><h1>서하 & 서준 방학 보드</h1></div>
+    
+    <div class="rule-box">
+        <b>🐾 약속을 지켜요!</b><br>
+        • 📖 <b>동시(짧은 시)</b>나 글밥 적은 책은 보너스 제외!<br>
+        • 📖 같은 책은 <b>3번까지만</b> 읽을 수 있어요!<br>
+        • 📺 <b>유튜브는 11시 이후</b> 시청 가능해요!
+    </div>
+
+    <div class="child-selector">
+        <button id="btn-seoha" class="btn-child active seoha" onclick="changeChild('서하')">
+            <img src="file (16).png"><br>서하
+        </button>
+        <button id="btn-seojun" class="btn-child seojun" onclick="changeChild('서준')">
+            <img src="file (18).png"><br>서준
+        </button>
+    </div>
+
+    <div class="time-box">
+        <div id="selected-date-text" style="color:white; font-size:1.2rem;">날짜 선택</div>
+        <div id="time-display" class="time-display">00:00:00</div>
+    </div>
+
+    <div id="calendar" class="calendar-grid"></div>
+
+    <div id="bonus-panel" style="display:none;">
+        <h3 id="bonus-title" style="margin: 0 0 10px 0; color: #6c5ce7; text-align: center;">📖 독서 보너스 충전</h3>
+        <div class="bonus-section">
+            <div id="book-inputs"></div>
+            <textarea id="review" style="width:100%; margin-top:10px;" placeholder="어떤 장면이 가장 기억에 남니?"></textarea>
+            <button class="calc-btn" onclick="saveAndSend()">🔋 시간 저장 및 전송</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjmvbO_JrfBxMawAbCCpbEoHWI5-A-bHuwRBvU2S8fdUMzoYfyGkahgYCLppSY27Ze/exec';
+
+    let currentChild = '서하';
+    let selectedDate = new Date().toISOString().split('T')[0];
+    let cloudData = {};
+
+    async function init() { await loadCloudData(); selectDate(selectedDate); }
+
+    async function loadCloudData() {
+        try {
+            const response = await fetch(`${SCRIPT_URL}?type=read&child=${currentChild}`);
+            cloudData = await response.json();
+            renderCalendar();
+        } catch (e) { console.log("데이터 로드 실패"); }
+    }
+
+    function isVacation(dateStr) {
+        const d = new Date(dateStr);
+        const start = new Date('2026-02-19');
+        const end = new Date('2026-02-27');
+        return d >= start && d <= end;
+    }
+
+    function renderCalendar() {
+        const cal = document.getElementById('calendar'); cal.innerHTML = '';
+        const now = new Date();
+        const firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+        const lastDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        for (let i = 0; i < firstDay; i++) cal.appendChild(document.createElement('div'));
+        for (let d = 1; d <= lastDate; d++) {
+            const dateStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
+            const dayNum = new Date(dateStr).getDay();
+            const dayEl = document.createElement('div');
+            dayEl.className = `day ${[0,6].includes(dayNum) ? 'weekend' : ''} ${isVacation(dateStr) ? 'vacation' : ''} ${dateStr === selectedDate ? 'selected' : ''}`;
+            if (cloudData[dateStr]) dayEl.classList.add('has-data');
+            dayEl.innerText = d; dayEl.onclick = () => selectDate(dateStr);
+            cal.appendChild(dayEl);
+        }
+    }
+
+    function selectDate(dateStr) {
+        selectedDate = dateStr;
+        const dayNum = new Date(dateStr).getDay();
+        const isWeekend = [0,6].includes(dayNum);
+        const vacation = isVacation(dateStr);
+        
+        // 보너스 입력 칸 생성 (방학 평일은 3권, 그 외는 5권)
+        const maxBooks = (vacation && !isWeekend) ? 3 : 5;
+        const inputArea = document.getElementById('book-inputs');
+        inputArea.innerHTML = '';
+        for (let i = 1; i <= maxBooks; i++) {
+            inputArea.innerHTML += `<div class="book-row"><span>${i}</span><input type="text" id="t-${i}" placeholder="책 제목"><input type="number" id="p-${i}" placeholder="쪽수"></div>`;
+        }
+        document.getElementById('bonus-title').innerText = `📖 독서 보너스 (${maxBooks}권 제한)`;
+
+        const existing = cloudData[dateStr];
+        if (existing) {
+            updateDisplay(existing.totalTime);
+            document.getElementById('review').value = existing.review || '';
+            const books = (existing.books || "").split(', ');
+            books.forEach((b, idx) => {
+                if (idx < maxBooks) {
+                    const match = b.match(/(.*)\((\d+)쪽\)/);
+                    if (match) { document.getElementById(`t-${idx+1}`).value = match[1]; document.getElementById(`p-${idx+1}`).value = match[2]; }
+                }
+            });
+        } else {
+            updateDisplay((isWeekend ? 210 : 130) * 60);
+        }
+
+        document.getElementById('selected-date-text').innerText = `${dateStr} (${isWeekend ? '주말' : (vacation ? '방학' : '평일')})`;
+        document.getElementById('bonus-panel').style.display = (isWeekend || vacation) ? 'block' : 'none';
+        renderCalendar();
+    }
+
+    function updateDisplay(s) {
+        const h = Math.floor(s/3600).toString().padStart(2,'0');
+        const m = Math.floor((s%3600)/60).toString().padStart(2,'0');
+        document.getElementById('time-display').innerText = `${h}:${m}:00`;
+    }
+
+    async function saveAndSend() {
+        let mins = 0; let count = 0; let books = [];
+        const inputs = document.querySelectorAll('.book-row').length;
+        for (let i = 1; i <= inputs; i++) {
+            const p = parseInt(document.getElementById(`p-${i}`).value);
+            const t = document.getElementById(`t-${i}`).value;
+            if (p && t) { count++; mins += (count === 1) ? p : (p * 0.5); books.push(`${t}(${p}쪽)`); }
+        }
+        if (count === 0) return alert("책 제목과 쪽수를 입력해줘!");
+        
+        const baseMins = [0,6].includes(new Date(selectedDate).getDay()) ? 210 : 130;
+        const payload = { child: currentChild, date: selectedDate, totalTime: (baseMins + mins) * 60, books: books.join(', '), review: document.getElementById('review').value };
+
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+            cloudData[selectedDate] = payload;
+            alert(`🐾 저장 완료! 오늘도 멋진 독서였어!`);
+            renderCalendar();
+        } catch (e) { alert("전송 실패! 인터넷 연결을 확인해줘."); }
+    }
+
+    async function changeChild(n) { 
+        currentChild = n; 
+        document.getElementById('btn-seoha').classList.toggle('active', n === '서하');
+        document.getElementById('btn-seojun').classList.toggle('active', n === '서준');
+        await loadCloudData();
+        selectDate(selectedDate); 
+    }
+</script>
+</body>
+</html>
