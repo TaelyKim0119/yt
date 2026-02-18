@@ -19,7 +19,8 @@
         /* 아이들 선택 버튼 (고양이 크게, 얼굴 삭제) */
         .child-selector { display: flex; gap: 15px; margin-bottom: 20px; }
         .btn-child { flex: 1; padding: 20px 10px; border: none; border-radius: 25px; font-size: 1.6rem; font-family: 'Gaegu'; cursor: pointer; background: #f0f0f0; transition: 0.3s; }
-        .btn-child img { width: 100px; height: auto; margin-bottom: 10px; border-radius: 15px; }
+        .btn-child img { width: 100px; height: auto; margin-bottom: 10px; border-radius: 15px; transition: transform 0.3s ease; }
+        .btn-child img.grow { transform: scale(2); }
         .btn-child.active.seoha { background: #ff9ff3; color: white; box-shadow: 0 5px 0 #ef87e5; }
         .btn-child.active.seojun { background: #48dbfb; color: white; box-shadow: 0 5px 0 #34c0e2; }
 
@@ -37,6 +38,8 @@
         .book-row { display: grid; grid-template-columns: 30px 2fr 1fr; gap: 8px; margin-bottom: 10px; align-items: center; }
         input, textarea { padding: 12px; border: 2px solid #ddd; border-radius: 12px; font-family: 'Gaegu'; font-size: 1.1rem; width: 100%; box-sizing: border-box; }
         .calc-btn { width: 100%; padding: 20px; background: #6c5ce7; color: white; border: none; border-radius: 25px; font-size: 1.8rem; font-family: 'Gaegu'; cursor: pointer; margin-top: 15px; box-shadow: 0 5px 0 #5849c4; }
+        .calc-btn img { transition: transform 0.3s ease; }
+        .calc-btn img.grow { transform: scale(2); }
     </style>
 </head>
 <body onload="init()">
@@ -160,9 +163,9 @@
     }
 
     async function saveAndSend() {
-        const cat = document.querySelector('.main-cat');
-        cat.classList.add('grow');
-        setTimeout(() => cat.classList.remove('grow'), 1000);
+        const allCats = document.querySelectorAll('.main-cat, .btn-child img, .calc-btn img');
+        allCats.forEach(cat => cat.classList.add('grow'));
+        setTimeout(() => allCats.forEach(cat => cat.classList.remove('grow')), 1000);
 
         let mins = 0; let count = 0; let books = [];
         const inputs = document.querySelectorAll('.book-row').length;
