@@ -10,7 +10,8 @@
         .container { background: white; width: 100%; max-width: 500px; border-radius: 30px; padding: 25px; border: 6px solid #ffcbef; box-shadow: 0 10px 0 #ff9ff3; position: relative; }
         
         /* 메인 고양이 아이콘 (로케트 대신) */
-        .main-cat { width: 160px; display: block; margin: 0 auto 10px; }
+        .main-cat { width: 160px; display: block; margin: 0 auto 10px; transition: transform 0.3s ease; }
+        .main-cat.grow { transform: scale(2); }
         
         .header h1 { text-align: center; color: #6c5ce7; font-size: 2.2rem; margin: 10px 0; }
         .rule-box { background: #fff5f5; border: 2px solid #ff7675; border-radius: 15px; padding: 15px; margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; }
@@ -159,6 +160,10 @@
     }
 
     async function saveAndSend() {
+        const cat = document.querySelector('.main-cat');
+        cat.classList.add('grow');
+        setTimeout(() => cat.classList.remove('grow'), 1000);
+
         let mins = 0; let count = 0; let books = [];
         const inputs = document.querySelectorAll('.book-row').length;
         for (let i = 1; i <= inputs; i++) {
