@@ -40,6 +40,18 @@
         .calc-btn { width: 100%; padding: 20px; background: #6c5ce7; color: white; border: none; border-radius: 25px; font-size: 1.8rem; font-family: 'Gaegu'; cursor: pointer; margin-top: 15px; box-shadow: 0 5px 0 #5849c4; }
         .calc-btn img { transition: transform 0.3s ease; }
         .calc-btn img.grow { transform: scale(2); }
+
+        /* 제휴문의 섹션 */
+        .partnership-section { margin-top: 30px; padding-top: 20px; border-top: 3px dashed #ddd; }
+        .partnership-section h3 { text-align: center; color: #6c5ce7; margin-bottom: 15px; }
+        .partnership-form { background: #f5f0ff; padding: 20px; border-radius: 20px; border: 2px solid #a29bfe; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #6c5ce7; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 12px; font-family: 'Gaegu'; font-size: 1.1rem; box-sizing: border-box; }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        .submit-btn { width: 100%; padding: 15px; background: #a29bfe; color: white; border: none; border-radius: 20px; font-size: 1.4rem; font-family: 'Gaegu'; cursor: pointer; box-shadow: 0 4px 0 #8b82e8; transition: 0.2s; }
+        .submit-btn:hover { background: #8b82e8; }
+        .submit-btn:active { box-shadow: 0 2px 0 #7b72d8; transform: translateY(2px); }
     </style>
 </head>
 <body onload="init()">
@@ -77,6 +89,29 @@
             <textarea id="review" style="width:100%; margin-top:10px;" placeholder="어떤 장면이 가장 기억에 남니?"></textarea>
             <button class="calc-btn" onclick="saveAndSend()"><img src="file (41).png" style="width: 128px; height: auto; vertical-align: middle; margin-right: 8px;">시간 저장 및 전송</button>
         </div>
+    </div>
+
+    <div class="partnership-section">
+        <h3>📬 제휴문의</h3>
+        <form class="partnership-form" action="https://formspree.io/f/mbdakdqg" method="POST">
+            <div class="form-group">
+                <label for="name">이름 / 회사명</label>
+                <input type="text" id="name" name="name" placeholder="홍길동 / ABC 컴퍼니" required>
+            </div>
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <input type="email" id="email" name="email" placeholder="example@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">연락처</label>
+                <input type="tel" id="phone" name="phone" placeholder="010-1234-5678">
+            </div>
+            <div class="form-group">
+                <label for="message">문의 내용</label>
+                <textarea id="message" name="message" placeholder="제휴 관련 문의사항을 적어주세요!" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">문의하기</button>
+        </form>
     </div>
 </div>
 
