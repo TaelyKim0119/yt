@@ -144,7 +144,7 @@
     <div class="login-screen">
         <img src="file (45).png">
         <h1>핑크냥 튜브타임</h1>
-        <p style="color:#666; font-size:1rem; margin-bottom:20px; text-align:center;">책을 읽으면 유튜브 시간이 충전돼요!<br>건강한 미디어 습관을 만들어보세요 📚</p>
+        <p style="color:#666; font-size:1rem; margin-bottom:20px; text-align:center;">책을 읽으면 유튜브 시간이 충전돼요!<br>건강한 미디어 습관을 만들어보세요 <img src="file (22).png" style="width:24px; vertical-align:middle;"></p>
         <button class="login-btn google" onclick="loginWithGoogle()">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> 부모님 로그인
         </button>
@@ -178,7 +178,7 @@
     <!-- 앱 컨텐츠 -->
     <div class="app-content">
     <div id="family-info" class="family-info">
-        🏠 가족코드: <strong id="display-family-code"></strong>
+        <img src="file (23).png" style="width:20px; vertical-align:middle;"> 가족코드: <strong id="display-family-code"></strong>
         <button class="logout-btn" onclick="leaveFamily()" style="margin-left:auto;">나가기</button>
     </div>
     <div id="user-info" class="user-info" style="display:none;">
@@ -189,11 +189,11 @@
     <img src="file (45).png" class="main-cat"> <div class="header"><h1>핑크냥 튜브타임</h1></div>
 
     <button id="lock-btn" class="lock-btn" onclick="toggleParentMode()">
-        🔒 <span>부모 설정</span>
+        <img src="file (45).png" style="width:24px; vertical-align:middle;"> <span>부모 설정</span>
     </button>
     
     <div class="rule-box">
-        <b>🐾 약속을 지켜요!</b>
+        <b><img src="file (24).png" style="width:22px; vertical-align:middle;"> 약속을 지켜요!</b>
         <div id="rules-container"></div>
         <button class="add-rule-btn" onclick="addRule()">+ 규칙 추가</button>
     </div>
@@ -263,7 +263,7 @@
     <div id="calendar" class="calendar-grid"></div>
 
     <div id="bonus-panel" style="display:none;">
-        <h3 id="bonus-title" style="margin: 0 0 10px 0; color: #6c5ce7; text-align: center;">📖 독서 보너스 충전</h3>
+        <h3 id="bonus-title" style="margin: 0 0 10px 0; color: #6c5ce7; text-align: center;"><img src="file (31).png" style="width:28px; vertical-align:middle;"> 독서 보너스 충전</h3>
         <div class="bonus-section">
             <div id="book-inputs"></div>
             <textarea id="review" style="width:100%; margin-top:10px;" placeholder="어떤 장면이 가장 기억에 남니?"></textarea>
@@ -273,16 +273,16 @@
 
     <!-- 사이트 소개 -->
     <div class="site-info">
-        <h3>📱 핑크냥 튜브타임이란?</h3>
+        <h3><img src="file (36).png" style="width:24px; vertical-align:middle;"> 핑크냥 튜브타임이란?</h3>
         <p>아이들의 건강한 미디어 습관을 위해 만들어진 가족용 앱입니다. 독서를 하면 유튜브 시청 시간이 충전되는 재미있는 보상 시스템으로, 아이들이 스스로 책을 읽고 싶어하게 만들어요!</p>
 
-        <h3>✨ 주요 기능</h3>
+        <h3><img src="file (43).png" style="width:24px; vertical-align:middle;"> 주요 기능</h3>
         <p>• 독서 시간에 따른 유튜브 보너스 시간 자동 계산<br>
         • 가족 코드로 부모-자녀 간 데이터 공유<br>
         • 캘린더로 독서 기록 한눈에 확인<br>
         • 귀여운 고양이 캐릭터로 재미있는 경험</p>
 
-        <h3>👨‍👩‍👧 이렇게 사용하세요</h3>
+        <h3><img src="file (41).png" style="width:24px; vertical-align:middle;"> 이렇게 사용하세요</h3>
         <p>1. 부모님이 로그인하여 가족 코드 생성<br>
         2. 아이들에게 가족 코드 공유<br>
         3. 아이가 책을 읽으면 제목과 쪽수 입력<br>
@@ -578,7 +578,7 @@
             // 잠금
             isParentMode = false;
             document.body.classList.remove('parent-mode');
-            lockBtn.innerHTML = '🔒 <span>부모 설정</span>';
+            lockBtn.innerHTML = '<img src="file (45).png" style="width:24px; vertical-align:middle;"> <span>부모 설정</span>';
             lockBtn.classList.remove('unlocked');
         } else {
             // PIN 입력
@@ -586,7 +586,7 @@
             if (pin === loadPIN()) {
                 isParentMode = true;
                 document.body.classList.add('parent-mode');
-                lockBtn.innerHTML = '🔓 <span>설정 완료 (잠금)</span>';
+                lockBtn.innerHTML = '<img src="file (16).png" style="width:24px; vertical-align:middle;"> <span>설정 완료 (잠금)</span>';
                 lockBtn.classList.add('unlocked');
 
                 // PIN 변경 옵션
@@ -803,7 +803,7 @@
         for (let i = 1; i <= maxBooks; i++) {
             inputArea.innerHTML += `<div class="book-row"><span>${i}</span><input type="text" id="t-${i}" placeholder="책 제목"><input type="number" id="p-${i}" placeholder="쪽수"></div>`;
         }
-        document.getElementById('bonus-title').innerText = `📖 독서 보너스 (${maxBooks}권 제한)`;
+        document.getElementById('bonus-title').innerHTML = `<img src="file (31).png" style="width:28px; vertical-align:middle;"> 독서 보너스 (${maxBooks}권 제한)`;
 
         const existing = cloudData[dateStr];
         if (existing) {
