@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-2262917513137602">
-    <title>핑크냥 튜브타임</title>
+    <meta name="description" content="핑크냥 튜브타임 - 아이들의 유튜브 시청 시간을 독서와 연계하여 관리하는 가족용 앱. 독서 보너스로 건강한 미디어 습관을 만들어요!">
+    <meta name="keywords" content="유튜브 시간 관리, 아이 미디어 관리, 독서 보너스, 가족 앱, 자녀 스크린타임">
+    <meta name="author" content="핑크냥">
+    <meta property="og:title" content="핑크냥 튜브타임 - 독서로 유튜브 시간 충전!">
+    <meta property="og:description" content="아이들이 책을 읽으면 유튜브 시간이 충전되는 재미있는 가족용 앱">
+    <meta property="og:type" content="website">
+    <title>핑크냥 튜브타임 - 독서로 유튜브 시간 관리</title>
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2262917513137602" crossorigin="anonymous"></script>
     <!-- Firebase SDK -->
@@ -115,6 +121,20 @@
         .family-code-display .code { font-size: 2.5rem; color: #6c5ce7; letter-spacing: 5px; font-weight: bold; }
         .family-code-input { font-size: 1.5rem; text-align: center; letter-spacing: 3px; text-transform: uppercase; width: 200px; }
         .family-info { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 8px 12px; background: #f5f0ff; border-radius: 15px; font-size: 0.9rem; color: #6c5ce7; }
+
+        /* 푸터 및 정보 섹션 */
+        .site-footer { margin-top: 30px; padding-top: 20px; border-top: 2px dashed #ddd; text-align: center; font-size: 0.9rem; color: #888; }
+        .footer-links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 15px; }
+        .footer-links a { color: #6c5ce7; text-decoration: none; }
+        .footer-links a:hover { text-decoration: underline; }
+        .site-info { background: #f9f9f9; border-radius: 15px; padding: 20px; margin-top: 20px; text-align: left; line-height: 1.8; }
+        .site-info h3 { color: #6c5ce7; margin: 0 0 10px 0; font-size: 1.1rem; }
+        .site-info p { margin: 0 0 15px 0; color: #666; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal.show { display: flex; }
+        .modal-content { background: white; border-radius: 20px; padding: 25px; max-width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-content h2 { color: #6c5ce7; margin-top: 0; }
+        .modal-close { background: #6c5ce7; color: white; border: none; padding: 10px 25px; border-radius: 15px; font-family: 'Gaegu'; font-size: 1rem; cursor: pointer; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -124,6 +144,7 @@
     <div class="login-screen">
         <img src="file (45).png">
         <h1>핑크냥 튜브타임</h1>
+        <p style="color:#666; font-size:1rem; margin-bottom:20px; text-align:center;">책을 읽으면 유튜브 시간이 충전돼요!<br>건강한 미디어 습관을 만들어보세요 📚</p>
         <button class="login-btn google" onclick="loginWithGoogle()">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> 부모님 로그인
         </button>
@@ -250,8 +271,91 @@
         </div>
     </div>
 
+    <!-- 사이트 소개 -->
+    <div class="site-info">
+        <h3>📱 핑크냥 튜브타임이란?</h3>
+        <p>아이들의 건강한 미디어 습관을 위해 만들어진 가족용 앱입니다. 독서를 하면 유튜브 시청 시간이 충전되는 재미있는 보상 시스템으로, 아이들이 스스로 책을 읽고 싶어하게 만들어요!</p>
+
+        <h3>✨ 주요 기능</h3>
+        <p>• 독서 시간에 따른 유튜브 보너스 시간 자동 계산<br>
+        • 가족 코드로 부모-자녀 간 데이터 공유<br>
+        • 캘린더로 독서 기록 한눈에 확인<br>
+        • 귀여운 고양이 캐릭터로 재미있는 경험</p>
+
+        <h3>👨‍👩‍👧 이렇게 사용하세요</h3>
+        <p>1. 부모님이 로그인하여 가족 코드 생성<br>
+        2. 아이들에게 가족 코드 공유<br>
+        3. 아이가 책을 읽으면 제목과 쪽수 입력<br>
+        4. 자동으로 계산된 유튜브 시간 확인!</p>
+    </div>
+
+    <!-- 푸터 -->
+    <div class="site-footer">
+        <div class="footer-links">
+            <a href="#" onclick="showModal('privacy')">개인정보처리방침</a>
+            <a href="#" onclick="showModal('terms')">이용약관</a>
+            <a href="mailto:pinknyang@example.com">문의하기</a>
+        </div>
+        <p>© 2024 핑크냥 튜브타임. All rights reserved.</p>
+    </div>
+
     </div><!-- app-content 끝 -->
 </div>
+
+<!-- 개인정보처리방침 모달 -->
+<div id="privacy-modal" class="modal">
+    <div class="modal-content">
+        <h2>개인정보처리방침</h2>
+        <p><strong>1. 수집하는 개인정보</strong><br>
+        본 서비스는 Google 로그인 시 이메일 주소와 표시 이름을 수집합니다. 아이들의 독서 기록(책 제목, 쪽수)은 가족 코드와 연결되어 저장됩니다.</p>
+
+        <p><strong>2. 개인정보의 이용 목적</strong><br>
+        수집된 정보는 서비스 제공, 가족 간 데이터 공유, 사용자 식별 목적으로만 사용됩니다.</p>
+
+        <p><strong>3. 개인정보의 보관</strong><br>
+        개인정보는 Firebase 클라우드에 안전하게 저장되며, 사용자 요청 시 삭제됩니다.</p>
+
+        <p><strong>4. 제3자 제공</strong><br>
+        수집된 개인정보는 제3자에게 제공되지 않습니다.</p>
+
+        <p><strong>5. 문의</strong><br>
+        개인정보 관련 문의: pinknyang@example.com</p>
+
+        <button class="modal-close" onclick="hideModal('privacy')">닫기</button>
+    </div>
+</div>
+
+<!-- 이용약관 모달 -->
+<div id="terms-modal" class="modal">
+    <div class="modal-content">
+        <h2>이용약관</h2>
+        <p><strong>1. 서비스 목적</strong><br>
+        핑크냥 튜브타임은 아이들의 건강한 미디어 습관 형성을 돕기 위한 가족용 서비스입니다.</p>
+
+        <p><strong>2. 이용자의 의무</strong><br>
+        • 타인의 가족 코드를 무단으로 사용하지 않습니다.<br>
+        • 서비스를 악용하거나 비정상적인 방법으로 이용하지 않습니다.</p>
+
+        <p><strong>3. 서비스 제공자의 책임</strong><br>
+        • 서비스 안정성을 위해 최선을 다합니다.<br>
+        • 데이터 손실에 대해 제한적 책임을 집니다.</p>
+
+        <p><strong>4. 서비스 변경 및 중단</strong><br>
+        서비스는 사전 공지 후 변경되거나 중단될 수 있습니다.</p>
+
+        <button class="modal-close" onclick="hideModal('terms')">닫기</button>
+    </div>
+</div>
+
+<script>
+    // 모달 표시/숨김
+    function showModal(type) {
+        document.getElementById(type + '-modal').classList.add('show');
+    }
+    function hideModal(type) {
+        document.getElementById(type + '-modal').classList.remove('show');
+    }
+</script>
 
 <script>
     // Firebase 설정
