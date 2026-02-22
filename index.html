@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>핑크냥 튜브타임</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap');
         body { font-family: 'Gaegu', cursive; background-color: #fff9eb; margin: 0; padding: 15px; display: flex; justify-content: center; }
@@ -76,11 +80,47 @@
         body:not(.parent-mode) .child-name { pointer-events: none; cursor: default; }
         body:not(.parent-mode) .child-name:hover { background: transparent; }
         body:not(.parent-mode) .btn-child img { pointer-events: none; }
+
+        /* 로그인 화면 */
+        .login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; }
+        .login-screen img { width: 150px; margin-bottom: 20px; }
+        .login-screen h1 { color: #6c5ce7; margin-bottom: 30px; }
+        .login-btn { display: flex; align-items: center; gap: 10px; padding: 15px 30px; border: 2px solid #ddd; border-radius: 30px; background: white; font-size: 1.2rem; font-family: 'Gaegu'; cursor: pointer; margin: 10px 0; transition: 0.2s; }
+        .login-btn:hover { background: #f5f5f5; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+        .login-btn.google { border-color: #4285f4; }
+        .login-btn.anon { border-color: #aaa; }
+        .login-btn img { width: 24px; height: 24px; }
+        .user-info { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 10px 15px; background: #f0f0f0; border-radius: 20px; font-size: 0.95rem; }
+        .user-info img { width: 30px; height: 30px; border-radius: 50%; }
+        .logout-btn { background: #ff7675; color: white; border: none; padding: 5px 12px; border-radius: 10px; cursor: pointer; font-family: 'Gaegu'; }
+        .app-content { display: none; }
+        body.logged-in .login-screen { display: none; }
+        body.logged-in .app-content { display: block; }
     </style>
 </head>
-<body onload="init()">
+<body>
 
 <div class="container">
+    <!-- 로그인 화면 -->
+    <div class="login-screen">
+        <img src="file (45).png">
+        <h1>핑크냥 튜브타임</h1>
+        <button class="login-btn google" onclick="loginWithGoogle()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> Google로 시작하기
+        </button>
+        <button class="login-btn anon" onclick="loginAnonymously()">
+            🔒 로그인 없이 사용하기
+        </button>
+        <p style="color:#aaa; font-size:0.9rem; margin-top:20px;">로그인하면 여러 기기에서 동기화됩니다</p>
+    </div>
+
+    <!-- 앱 컨텐츠 -->
+    <div class="app-content">
+    <div id="user-info" class="user-info" style="display:none;">
+        <img id="user-photo" src="">
+        <span id="user-name"></span>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+    </div>
     <button id="lock-btn" class="lock-btn" onclick="toggleParentMode()">🔒</button>
     <img src="file (45).png" class="main-cat"> <div class="header"><h1>핑크냥 튜브타임</h1></div>
     
@@ -163,11 +203,69 @@
         </div>
     </div>
 
+    </div><!-- app-content 끝 -->
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjmvbO_JrfBxMawAbCCpbEoHWI5-A-bHuwRBvU2S8fdUMzoYfyGkahgYCLppSY27Ze/exec';
+    // Firebase 설정
+    const firebaseConfig = {
+        apiKey: "AIzaSyDL1-fHGCk3X7Hk8WQe2iemIs-Y24XKYM8",
+        authDomain: "pinknyang-tube.firebaseapp.com",
+        projectId: "pinknyang-tube",
+        storageBucket: "pinknyang-tube.firebasestorage.app",
+        messagingSenderId: "303769730622",
+        appId: "1:303769730622:web:f1348075a3ed75e7de5b6f"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let currentUser = null;
     const CAT_IMAGES = ['file (16).png', 'file (18).png', 'file (41).png', 'file (45).png'];
+
+    // 인증 상태 감지
+    auth.onAuthStateChanged(user => {
+        currentUser = user;
+        if (user) {
+            document.body.classList.add('logged-in');
+            if (!user.isAnonymous) {
+                document.getElementById('user-info').style.display = 'flex';
+                document.getElementById('user-photo').src = user.photoURL || 'file (45).png';
+                document.getElementById('user-name').innerText = user.displayName || '사용자';
+            }
+            init();
+        } else {
+            document.body.classList.remove('logged-in');
+            document.getElementById('user-info').style.display = 'none';
+        }
+    });
+
+    // Google 로그인
+    function loginWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).catch(err => {
+            alert('로그인 실패: ' + err.message);
+        });
+    }
+
+    // 익명 로그인
+    function loginAnonymously() {
+        auth.signInAnonymously().catch(err => {
+            alert('로그인 실패: ' + err.message);
+        });
+    }
+
+    // 로그아웃
+    function logout() {
+        if (confirm('로그아웃 하시겠습니까?')) {
+            auth.signOut();
+        }
+    }
+
+    // 사용자 ID 가져오기
+    function getUserId() {
+        return currentUser ? currentUser.uid : 'local';
+    }
 
     let currentChild = 'child1';
     let isParentMode = false;
@@ -359,11 +457,17 @@
     async function init() { loadSavedImages(); renderChildNames(); renderRules(); renderSettings(); await loadCloudData(); selectDate(selectedDate); }
 
     async function loadCloudData() {
+        if (!currentUser) return;
         try {
-            const response = await fetch(`${SCRIPT_URL}?type=read&child=${currentChild}`);
-            cloudData = await response.json();
+            const doc = await db.collection('users').doc(getUserId())
+                .collection('children').doc(currentChild).get();
+            cloudData = doc.exists ? doc.data().records || {} : {};
             renderCalendar();
-        } catch (e) { console.log("데이터 로드 실패"); }
+        } catch (e) {
+            console.log("데이터 로드 실패:", e);
+            cloudData = {};
+            renderCalendar();
+        }
     }
 
     function isVacation(dateStr) {
@@ -459,14 +563,20 @@
 
         const isWeekend = [0,6].includes(new Date(selectedDate).getDay());
         const baseMins = isWeekend ? settings.weekendMins : settings.weekdayMins;
-        const payload = { child: currentChild, date: selectedDate, totalTime: (baseMins + mins) * 60, books: books.join(', '), review: document.getElementById('review').value };
+        const record = { totalTime: (baseMins + mins) * 60, books: books.join(', '), review: document.getElementById('review').value };
 
         try {
-            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-            cloudData[selectedDate] = payload;
+            if (!currentUser) throw new Error('로그인 필요');
+            cloudData[selectedDate] = record;
+            await db.collection('users').doc(getUserId())
+                .collection('children').doc(currentChild)
+                .set({ records: cloudData }, { merge: true });
             alert(`🐾 저장 완료! 오늘도 멋진 독서였어!`);
             renderCalendar();
-        } catch (e) { alert("전송 실패! 인터넷 연결을 확인해줘."); }
+        } catch (e) {
+            console.log(e);
+            alert("전송 실패! 인터넷 연결을 확인해줘.");
+        }
     }
 
     async function changeChild(n) {
