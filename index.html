@@ -38,6 +38,8 @@
         .btn-child.active.child1 { background: #ff9ff3; color: white; box-shadow: 0 5px 0 #ef87e5; }
         .btn-child.active.child2 { background: #48dbfb; color: white; box-shadow: 0 5px 0 #34c0e2; }
         .btn-child.active.child3 { background: #a29bfe; color: white; box-shadow: 0 5px 0 #8b82e8; }
+        .child-name { cursor: text; padding: 2px 8px; border-radius: 8px; transition: background 0.2s; }
+        .child-name:hover { background: rgba(0,0,0,0.1); }
 
         .time-box { background: #2d3436; color: #55efc4; border-radius: 25px; padding: 20px; text-align: center; margin-bottom: 20px; border: 4px solid #636e72; position: relative; }
         .time-label { color: #fff; font-size: 1.3rem; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -107,14 +109,17 @@
     </div>
 
     <div class="child-selector">
-        <button id="btn-child1" class="btn-child active child1" onclick="changeChild('아이1')">
-            <img id="img-child1" src="file (16).png" onclick="event.stopPropagation(); cycleImage('child1')"><br>아이1
+        <button id="btn-child1" class="btn-child active child1" onclick="changeChild('child1')">
+            <img id="img-child1" src="file (16).png" onclick="event.stopPropagation(); cycleImage('child1')"><br>
+            <span id="name-child1" class="child-name" onclick="event.stopPropagation(); editChildName('child1')">아이1</span>
         </button>
-        <button id="btn-child2" class="btn-child child2" onclick="changeChild('아이2')">
-            <img id="img-child2" src="file (18).png" onclick="event.stopPropagation(); cycleImage('child2')"><br>아이2
+        <button id="btn-child2" class="btn-child child2" onclick="changeChild('child2')">
+            <img id="img-child2" src="file (18).png" onclick="event.stopPropagation(); cycleImage('child2')"><br>
+            <span id="name-child2" class="child-name" onclick="event.stopPropagation(); editChildName('child2')">아이2</span>
         </button>
-        <button id="btn-child3" class="btn-child child3" onclick="changeChild('아이3')">
-            <img id="img-child3" src="file (45).png" onclick="event.stopPropagation(); cycleImage('child3')"><br>아이3
+        <button id="btn-child3" class="btn-child child3" onclick="changeChild('child3')">
+            <img id="img-child3" src="file (45).png" onclick="event.stopPropagation(); cycleImage('child3')"><br>
+            <span id="name-child3" class="child-name" onclick="event.stopPropagation(); editChildName('child3')">아이3</span>
         </button>
     </div>
 
@@ -142,7 +147,35 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjmvbO_JrfBxMawAbCCpbEoHWI5-A-bHuwRBvU2S8fdUMzoYfyGkahgYCLppSY27Ze/exec';
     const CAT_IMAGES = ['file (16).png', 'file (18).png', 'file (41).png', 'file (45).png'];
 
-    let currentChild = '아이1';
+    let currentChild = 'child1';
+
+    const DEFAULT_NAMES = { child1: '아이1', child2: '아이2', child3: '아이3' };
+
+    function loadChildNames() {
+        const saved = localStorage.getItem('childNames');
+        return saved ? JSON.parse(saved) : DEFAULT_NAMES;
+    }
+
+    function saveChildNames(names) {
+        localStorage.setItem('childNames', JSON.stringify(names));
+    }
+
+    function renderChildNames() {
+        const names = loadChildNames();
+        ['child1', 'child2', 'child3'].forEach(id => {
+            document.getElementById('name-' + id).innerText = names[id];
+        });
+    }
+
+    function editChildName(childId) {
+        const names = loadChildNames();
+        const newName = prompt('이름을 입력하세요:', names[childId]);
+        if (newName && newName.trim()) {
+            names[childId] = newName.trim();
+            saveChildNames(names);
+            renderChildNames();
+        }
+    }
 
     function cycleImage(childId) {
         const img = document.getElementById('img-' + childId);
@@ -253,7 +286,7 @@
     let selectedDate = new Date().toISOString().split('T')[0];
     let cloudData = {};
 
-    async function init() { loadSavedImages(); renderRules(); renderSettings(); await loadCloudData(); selectDate(selectedDate); }
+    async function init() { loadSavedImages(); renderChildNames(); renderRules(); renderSettings(); await loadCloudData(); selectDate(selectedDate); }
 
     async function loadCloudData() {
         try {
@@ -367,9 +400,9 @@
 
     async function changeChild(n) {
         currentChild = n;
-        document.getElementById('btn-child1').classList.toggle('active', n === '아이1');
-        document.getElementById('btn-child2').classList.toggle('active', n === '아이2');
-        document.getElementById('btn-child3').classList.toggle('active', n === '아이3');
+        document.getElementById('btn-child1').classList.toggle('active', n === 'child1');
+        document.getElementById('btn-child2').classList.toggle('active', n === 'child2');
+        document.getElementById('btn-child3').classList.toggle('active', n === 'child3');
         await loadCloudData();
         selectDate(selectedDate);
     }
