@@ -18,8 +18,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap');
-        body { font-family: 'Gaegu', cursive; background-color: #fff9eb; margin: 0; padding: 15px; display: flex; justify-content: center; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #fff9eb; margin: 0; padding: 15px; display: flex; justify-content: center; }
         .container { background: white; width: 100%; max-width: 500px; border-radius: 30px; padding: 25px; border: 6px solid #ffcbef; box-shadow: 0 10px 0 #ff9ff3; position: relative; }
         
         /* 메인 고양이 아이콘 (로케트 대신) */
@@ -31,7 +31,7 @@
         .rule-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
         .rule-item input { flex: 1; border: 1px dashed #ff7675; background: transparent; font-size: 1.1rem; padding: 5px; border-radius: 8px; }
         .rule-item button { background: #ff7675; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; }
-        .add-rule-btn { background: #ff7675; color: white; border: none; border-radius: 12px; padding: 8px 15px; cursor: pointer; font-family: 'Gaegu'; font-size: 1rem; margin-top: 10px; }
+        .add-rule-btn { background: #ff7675; color: white; border: none; border-radius: 12px; padding: 8px 15px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; font-size: 1rem; margin-top: 10px; }
 
         /* 설정 섹션 */
         .settings-section { background: #e8f5e9; border: 2px solid #81c784; border-radius: 15px; padding: 15px; margin-bottom: 20px; }
@@ -39,13 +39,13 @@
         .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .setting-item { display: flex; flex-direction: column; gap: 5px; }
         .setting-item label { font-size: 0.95rem; color: #388e3c; }
-        .setting-item input { padding: 8px; border: 2px solid #81c784; border-radius: 10px; font-family: 'Gaegu'; font-size: 1rem; text-align: center; }
+        .setting-item input { padding: 8px; border: 2px solid #81c784; border-radius: 10px; font-family: 'Noto Sans KR', sans-serif; font-size: 1rem; text-align: center; }
         .settings-content { display: none; }
         .settings-content.show { display: block; }
         
         /* 아이들 선택 버튼 (고양이 크게, 얼굴 삭제) */
         .child-selector { display: flex; gap: 15px; margin-bottom: 20px; }
-        .btn-child { flex: 1; padding: 20px 10px; border: none; border-radius: 25px; font-size: 1.6rem; font-family: 'Gaegu'; cursor: pointer; background: #f0f0f0; transition: 0.3s; }
+        .btn-child { flex: 1; padding: 20px 10px; border: none; border-radius: 25px; font-size: 1.6rem; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; background: #f0f0f0; transition: 0.3s; }
         .btn-child img { width: 100px; height: auto; margin-bottom: 10px; border-radius: 15px; transition: transform 0.3s ease; }
         .btn-child img.grow { transform: scale(2); }
         .btn-child.active.child1 { background: #ff9ff3; color: white; box-shadow: 0 5px 0 #ef87e5; }
@@ -71,13 +71,13 @@
 
         .bonus-section { background: #fdf9ff; padding: 20px; border-radius: 25px; border: 3px dashed #a29bfe; }
         .book-row { display: grid; grid-template-columns: 30px 2fr 1fr; gap: 8px; margin-bottom: 10px; align-items: center; }
-        input, textarea { padding: 12px; border: 2px solid #ddd; border-radius: 12px; font-family: 'Gaegu'; font-size: 1.1rem; width: 100%; box-sizing: border-box; }
-        .calc-btn { width: 100%; padding: 20px; background: #6c5ce7; color: white; border: none; border-radius: 25px; font-size: 1.8rem; font-family: 'Gaegu'; cursor: pointer; margin-top: 15px; box-shadow: 0 5px 0 #5849c4; }
+        input, textarea { padding: 12px; border: 2px solid #ddd; border-radius: 12px; font-family: 'Noto Sans KR', sans-serif; font-size: 1.1rem; width: 100%; box-sizing: border-box; }
+        .calc-btn { width: 100%; padding: 20px; background: #6c5ce7; color: white; border: none; border-radius: 25px; font-size: 1.8rem; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; margin-top: 15px; box-shadow: 0 5px 0 #5849c4; }
         .calc-btn img { transition: transform 0.3s ease; }
         .calc-btn img.grow { transform: scale(2); }
 
         /* 부모/아이 모드 */
-        .lock-btn { display: flex; align-items: center; gap: 8px; margin: 15px auto; padding: 12px 20px; background: #f5f5f5; border: 2px solid #ddd; border-radius: 20px; font-size: 1.2rem; font-family: 'Gaegu'; cursor: pointer; transition: 0.2s; }
+        .lock-btn { display: flex; align-items: center; gap: 8px; margin: 15px auto; padding: 12px 20px; background: #f5f5f5; border: 2px solid #ddd; border-radius: 20px; font-size: 1.2rem; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; transition: 0.2s; }
         .lock-btn:hover { background: #e0e0e0; border-color: #bbb; }
         .lock-btn.unlocked { background: #e8f5e9; border-color: #81c784; }
         .lock-btn span { font-size: 1rem; color: #666; }
@@ -95,14 +95,14 @@
         .login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; }
         .login-screen img { width: 150px; margin-bottom: 20px; }
         .login-screen h1 { color: #6c5ce7; margin-bottom: 30px; }
-        .login-btn { display: flex; align-items: center; gap: 10px; padding: 15px 30px; border: 2px solid #ddd; border-radius: 30px; background: white; font-size: 1.2rem; font-family: 'Gaegu'; cursor: pointer; margin: 10px 0; transition: 0.2s; }
+        .login-btn { display: flex; align-items: center; gap: 10px; padding: 15px 30px; border: 2px solid #ddd; border-radius: 30px; background: white; font-size: 1.2rem; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; margin: 10px 0; transition: 0.2s; }
         .login-btn:hover { background: #f5f5f5; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
         .login-btn.google { border-color: #4285f4; }
         .login-btn.anon { border-color: #aaa; }
         .login-btn img { width: 24px; height: 24px; }
         .user-info { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 10px 15px; background: #f0f0f0; border-radius: 20px; font-size: 0.95rem; }
         .user-info img { width: 30px; height: 30px; border-radius: 50%; }
-        .logout-btn { background: #ff7675; color: white; border: none; padding: 5px 12px; border-radius: 10px; cursor: pointer; font-family: 'Gaegu'; }
+        .logout-btn { background: #ff7675; color: white; border: none; padding: 5px 12px; border-radius: 10px; cursor: pointer; font-family: 'Noto Sans KR', sans-serif; }
         .app-content { display: none; }
         body.logged-in .login-screen { display: none; }
         body.logged-in.has-family .app-content { display: block; }
@@ -113,7 +113,7 @@
         .family-screen img { width: 120px; margin-bottom: 20px; }
         .family-screen h2 { color: #6c5ce7; margin-bottom: 10px; }
         .family-screen p { color: #888; margin-bottom: 30px; text-align: center; }
-        .family-btn { padding: 15px 30px; border: 2px solid #6c5ce7; border-radius: 20px; background: white; font-size: 1.1rem; font-family: 'Gaegu'; cursor: pointer; margin: 8px 0; width: 80%; max-width: 280px; transition: 0.2s; }
+        .family-btn { padding: 15px 30px; border: 2px solid #6c5ce7; border-radius: 20px; background: white; font-size: 1.1rem; font-family: 'Noto Sans KR', sans-serif; cursor: pointer; margin: 8px 0; width: 80%; max-width: 280px; transition: 0.2s; }
         .family-btn:hover { background: #6c5ce7; color: white; }
         .family-btn.primary { background: #6c5ce7; color: white; }
         .family-btn.primary:hover { background: #5849c4; }
@@ -134,104 +134,118 @@
         .modal.show { display: flex; }
         .modal-content { background: white; border-radius: 20px; padding: 25px; max-width: 90%; max-height: 80vh; overflow-y: auto; }
         .modal-content h2 { color: #6c5ce7; margin-top: 0; }
-        .modal-close { background: #6c5ce7; color: white; border: none; padding: 10px 25px; border-radius: 15px; font-family: 'Gaegu'; font-size: 1rem; cursor: pointer; margin-top: 15px; }
+        .modal-close { background: #6c5ce7; color: white; border: none; padding: 10px 25px; border-radius: 15px; font-family: 'Noto Sans KR', sans-serif; font-size: 1rem; cursor: pointer; margin-top: 15px; }
+
+        /* 언어 선택 */
+        .lang-switch { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; }
+        .lang-btn { padding: 5px 10px; border: 1px solid #ddd; border-radius: 10px; background: white; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+        .lang-btn.active { background: #6c5ce7; color: white; border-color: #6c5ce7; }
+        .lang-btn:hover { border-color: #6c5ce7; }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- 언어 선택 -->
+    <div class="lang-switch">
+        <button class="lang-btn active" onclick="setLang('ko')">한국어</button>
+        <button class="lang-btn" onclick="setLang('en')">English</button>
+        <button class="lang-btn" onclick="setLang('ja')">日本語</button>
+        <button class="lang-btn" onclick="setLang('zh')">中文</button>
+    </div>
+
     <!-- 시작 화면 -->
     <div class="login-screen">
         <img src="file (45).png">
-        <h1>핑크냥 튜브타임</h1>
-        <p style="color:#666; font-size:1rem; margin-bottom:20px; text-align:center;">책을 읽으면 유튜브 시간이 충전돼요!<br>건강한 미디어 습관을 만들어보세요 <img src="file (22).png" style="width:24px; vertical-align:middle;"></p>
+        <h1 data-i18n="title">핑크냥 튜브타임</h1>
+        <p style="color:#666; font-size:1rem; margin-bottom:20px; text-align:center;" data-i18n="subtitle">책을 읽으면 유튜브 시간이 충전돼요!<br>건강한 미디어 습관을 만들어보세요</p>
         <button class="login-btn google" onclick="loginWithGoogle()">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> 부모님 로그인
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> <span data-i18n="parentLogin">부모님 로그인</span>
         </button>
         <button class="login-btn anon" onclick="showKidsCodeEntry()">
-            <img src="file (16).png" style="width:32px; height:auto; border-radius:8px;"> 아이 입장 (코드 입력)
+            <img src="file (16).png" style="width:32px; height:auto; border-radius:8px;"> <span data-i18n="kidEntry">아이 입장 (코드 입력)</span>
         </button>
         <div id="kids-code-area" style="display:none; margin-top:20px; text-align:center;">
-            <input type="text" id="kids-family-code" class="family-code-input" placeholder="가족코드" maxlength="6">
+            <input type="text" id="kids-family-code" class="family-code-input" data-i18n="familyCode" placeholder="가족코드" maxlength="6">
             <br><br>
-            <button class="family-btn primary" onclick="kidsJoinFamily()">입장하기</button>
+            <button class="family-btn primary" onclick="kidsJoinFamily()" data-i18n="enter">입장하기</button>
         </div>
         <button class="login-btn" onclick="useAnonymously()" style="border-color:#ffa502; margin-top:15px;">
-            <img src="file (18).png" style="width:32px; height:auto; border-radius:8px;"> 체험하기 (로그인 없이)
+            <img src="file (18).png" style="width:32px; height:auto; border-radius:8px;"> <span data-i18n="tryDemo">체험하기 (로그인 없이)</span>
         </button>
-        <p style="color:#ff7675; font-size:0.85rem; margin-top:10px;">⚠️ 체험 모드는 데이터가 저장되지 않습니다</p>
-        <p style="color:#aaa; font-size:0.9rem; margin-top:10px;">부모님이 만든 가족코드로 입장하세요</p>
+        <p style="color:#ff7675; font-size:0.85rem; margin-top:10px;">⚠️ <span data-i18n="demoWarning">체험 모드는 데이터가 저장되지 않습니다</span></p>
+        <p style="color:#aaa; font-size:0.9rem; margin-top:10px;" data-i18n="enterCode">부모님이 만든 가족코드로 입장하세요</p>
     </div>
 
     <!-- 가족 코드 화면 (부모 첫 로그인 시 자동 생성) -->
     <div class="family-screen">
         <img src="file (45).png">
-        <h2>가족 코드 생성 완료!</h2>
+        <h2 data-i18n="familyCreated">가족 코드 생성 완료!</h2>
         <div class="family-code-display">
-            <p style="margin:0 0 10px 0;">가족 코드</p>
+            <p style="margin:0 0 10px 0;" data-i18n="familyCodeLabel">가족 코드</p>
             <div class="code" id="new-family-code"></div>
-            <p style="margin:10px 0 0 0; font-size:0.9rem; color:#888;">이 코드를 아이들에게 알려주세요!</p>
+            <p style="margin:10px 0 0 0; font-size:0.9rem; color:#888;" data-i18n="shareCode">이 코드를 아이들에게 알려주세요!</p>
         </div>
-        <button class="family-btn primary" onclick="startApp()">시작하기</button>
+        <button class="family-btn primary" onclick="startApp()" data-i18n="start">시작하기</button>
     </div>
 
     <!-- 앱 컨텐츠 -->
     <div class="app-content">
     <div id="family-info" class="family-info">
-        <img src="file (23).png" style="width:20px; vertical-align:middle;"> 가족코드: <strong id="display-family-code"></strong>
-        <button class="logout-btn" onclick="leaveFamily()" style="margin-left:auto;">나가기</button>
+        <img src="file (23).png" style="width:20px; vertical-align:middle;"> <span data-i18n="familyCodeLabel">가족코드:</span> <strong id="display-family-code"></strong>
+        <button class="logout-btn" onclick="leaveFamily()" style="margin-left:auto;" data-i18n="leave">나가기</button>
     </div>
     <div id="user-info" class="user-info" style="display:none;">
         <img id="user-photo" src="">
         <span id="user-name"></span>
-        <button class="logout-btn" onclick="logout()">로그아웃</button>
+        <button class="logout-btn" onclick="logout()" data-i18n="logout">로그아웃</button>
     </div>
-    <img src="file (45).png" class="main-cat"> <div class="header"><h1>핑크냥 튜브타임</h1></div>
+    <img src="file (45).png" class="main-cat"> <div class="header"><h1 data-i18n="title">핑크냥 튜브타임</h1></div>
 
     <button id="lock-btn" class="lock-btn" onclick="toggleParentMode()">
-        <img src="file (45).png" style="width:24px; vertical-align:middle;"> <span>부모 설정</span>
+        <img src="file (45).png" style="width:24px; vertical-align:middle;"> <span data-i18n="parentSettings">부모 설정</span>
     </button>
-    
+
     <div class="rule-box">
-        <b><img src="file (24).png" style="width:22px; vertical-align:middle;"> 약속을 지켜요!</b>
+        <b><img src="file (24).png" style="width:22px; vertical-align:middle;"> <span data-i18n="rules">약속을 지켜요!</span></b>
         <div id="rules-container"></div>
         <button class="add-rule-btn" onclick="addRule()">+ 규칙 추가</button>
     </div>
 
     <div class="settings-section">
-        <h3 onclick="toggleSettings()">⚙️ 시간 & 보너스 설정 ▼</h3>
+        <h3 onclick="toggleSettings()">⚙️ <span data-i18n="timeSettings">시간 & 보너스 설정</span> ▼</h3>
         <div id="settings-content" class="settings-content">
             <div class="settings-grid">
                 <div class="setting-item">
-                    <label>평일 기본시간 (분)</label>
+                    <label data-i18n="weekdayTime">평일 기본시간 (분)</label>
                     <input type="number" id="set-weekday" value="130" onchange="saveSettings()">
                 </div>
                 <div class="setting-item">
-                    <label>주말 기본시간 (분)</label>
+                    <label data-i18n="weekendTime">주말 기본시간 (분)</label>
                     <input type="number" id="set-weekend" value="210" onchange="saveSettings()">
                 </div>
                 <div class="setting-item">
-                    <label>평일 최대 책 권수</label>
+                    <label data-i18n="weekdayBooks">평일 최대 책 권수</label>
                     <input type="number" id="set-books-weekday" value="5" onchange="saveSettings()">
                 </div>
                 <div class="setting-item">
-                    <label>방학 최대 책 권수</label>
+                    <label data-i18n="vacationBooks">방학 최대 책 권수</label>
                     <input type="number" id="set-books-vacation" value="3" onchange="saveSettings()">
                 </div>
                 <div class="setting-item">
-                    <label>첫 책 보너스 (쪽당 분)</label>
+                    <label data-i18n="firstBonus">첫 책 보너스 (쪽당 분)</label>
                     <input type="number" id="set-bonus-first" value="1" step="0.1" onchange="saveSettings()">
                 </div>
                 <div class="setting-item">
-                    <label>추가 책 보너스 (쪽당 분)</label>
+                    <label data-i18n="extraBonus">추가 책 보너스 (쪽당 분)</label>
                     <input type="number" id="set-bonus-extra" value="0.5" step="0.1" onchange="saveSettings()">
                 </div>
                 <div class="setting-item">
-                    <label>방학 시작일</label>
+                    <label data-i18n="vacationStart">방학 시작일</label>
                     <input type="date" id="set-vacation-start" onchange="saveSettings()">
                 </div>
                 <div class="setting-item">
-                    <label>방학 종료일</label>
+                    <label data-i18n="vacationEnd">방학 종료일</label>
                     <input type="date" id="set-vacation-end" onchange="saveSettings()">
                 </div>
             </div>
@@ -254,8 +268,8 @@
     </div>
 
     <div class="time-box">
-        <div id="selected-date-text" style="color:#aaa; font-size:1rem;">날짜 선택</div>
-        <div class="time-label"><span class="youtube-icon"></span> 오늘 남은 유튜브 시간</div>
+        <div id="selected-date-text" style="color:#aaa; font-size:1rem;" data-i18n="selectDate">날짜 선택</div>
+        <div class="time-label"><span class="youtube-icon"></span> <span data-i18n="remainingTime">오늘 남은 유튜브 시간</span></div>
         <div id="time-display" class="time-display">00:00:00</div>
         <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width: 100%;"></div></div>
     </div>
@@ -263,27 +277,27 @@
     <div id="calendar" class="calendar-grid"></div>
 
     <div id="bonus-panel" style="display:none;">
-        <h3 id="bonus-title" style="margin: 0 0 10px 0; color: #6c5ce7; text-align: center;"><img src="file (31).png" style="width:28px; vertical-align:middle;"> 독서 보너스 충전</h3>
+        <h3 id="bonus-title" style="margin: 0 0 10px 0; color: #6c5ce7; text-align: center;"><img src="file (31).png" style="width:28px; vertical-align:middle;"> <span data-i18n="readingBonus">독서 보너스 충전</span></h3>
         <div class="bonus-section">
             <div id="book-inputs"></div>
-            <textarea id="review" style="width:100%; margin-top:10px;" placeholder="어떤 장면이 가장 기억에 남니?"></textarea>
-            <button class="calc-btn" onclick="saveAndSend()"><img src="file (41).png" style="width: 128px; height: auto; vertical-align: middle; margin-right: 8px;">시간 저장 및 전송</button>
+            <textarea id="review" style="width:100%; margin-top:10px;" data-i18n="review" placeholder="어떤 장면이 가장 기억에 남니?"></textarea>
+            <button class="calc-btn" onclick="saveAndSend()"><img src="file (41).png" style="width: 128px; height: auto; vertical-align: middle; margin-right: 8px;"><span data-i18n="saveButton">시간 저장 및 전송</span></button>
         </div>
     </div>
 
     <!-- 사이트 소개 -->
     <div class="site-info">
-        <h3><img src="file (36).png" style="width:24px; vertical-align:middle;"> 핑크냥 튜브타임이란?</h3>
-        <p>아이들의 건강한 미디어 습관을 위해 만들어진 가족용 앱입니다. 독서를 하면 유튜브 시청 시간이 충전되는 재미있는 보상 시스템으로, 아이들이 스스로 책을 읽고 싶어하게 만들어요!</p>
+        <h3><img src="file (36).png" style="width:24px; vertical-align:middle;"> <span data-i18n="aboutTitle">핑크냥 튜브타임이란?</span></h3>
+        <p data-i18n="aboutDesc">아이들의 건강한 미디어 습관을 위해 만들어진 가족용 앱입니다. 독서를 하면 유튜브 시청 시간이 충전되는 재미있는 보상 시스템으로, 아이들이 스스로 책을 읽고 싶어하게 만들어요!</p>
 
-        <h3><img src="file (43).png" style="width:24px; vertical-align:middle;"> 주요 기능</h3>
-        <p>• 독서 시간에 따른 유튜브 보너스 시간 자동 계산<br>
+        <h3><img src="file (43).png" style="width:24px; vertical-align:middle;"> <span data-i18n="featuresTitle">주요 기능</span></h3>
+        <p data-i18n="features">• 독서 시간에 따른 유튜브 보너스 시간 자동 계산<br>
         • 가족 코드로 부모-자녀 간 데이터 공유<br>
         • 캘린더로 독서 기록 한눈에 확인<br>
         • 귀여운 고양이 캐릭터로 재미있는 경험</p>
 
-        <h3><img src="file (41).png" style="width:24px; vertical-align:middle;"> 이렇게 사용하세요</h3>
-        <p>1. 부모님이 로그인하여 가족 코드 생성<br>
+        <h3><img src="file (41).png" style="width:24px; vertical-align:middle;"> <span data-i18n="howToTitle">이렇게 사용하세요</span></h3>
+        <p data-i18n="howTo">1. 부모님이 로그인하여 가족 코드 생성<br>
         2. 아이들에게 가족 코드 공유<br>
         3. 아이가 책을 읽으면 제목과 쪽수 입력<br>
         4. 자동으로 계산된 유튜브 시간 확인!</p>
@@ -292,11 +306,11 @@
     <!-- 푸터 -->
     <div class="site-footer">
         <div class="footer-links">
-            <a href="#" onclick="showModal('privacy')">개인정보처리방침</a>
-            <a href="#" onclick="showModal('terms')">이용약관</a>
-            <a href="mailto:pinknyang@example.com">문의하기</a>
+            <a href="#" onclick="showModal('privacy')" data-i18n="privacy">개인정보처리방침</a>
+            <a href="#" onclick="showModal('terms')" data-i18n="terms">이용약관</a>
+            <a href="mailto:pinknyang@example.com" data-i18n="contact">문의하기</a>
         </div>
-        <p>© 2024 핑크냥 튜브타임. All rights reserved.</p>
+        <p>© 2026 PinkNyang TubeTime. All rights reserved.</p>
     </div>
 
     </div><!-- app-content 끝 -->
@@ -321,7 +335,7 @@
         <p><strong>5. 문의</strong><br>
         개인정보 관련 문의: pinknyang@example.com</p>
 
-        <button class="modal-close" onclick="hideModal('privacy')">닫기</button>
+        <button class="modal-close" onclick="hideModal('privacy')" data-i18n="close">닫기</button>
     </div>
 </div>
 
@@ -343,7 +357,7 @@
         <p><strong>4. 서비스 변경 및 중단</strong><br>
         서비스는 사전 공지 후 변경되거나 중단될 수 있습니다.</p>
 
-        <button class="modal-close" onclick="hideModal('terms')">닫기</button>
+        <button class="modal-close" onclick="hideModal('terms')" data-i18n="close">닫기</button>
     </div>
 </div>
 
@@ -355,6 +369,237 @@
     function hideModal(type) {
         document.getElementById(type + '-modal').classList.remove('show');
     }
+
+    // 다국어 지원
+    const translations = {
+        ko: {
+            title: '핑크냥 튜브타임',
+            subtitle: '책을 읽으면 유튜브 시간이 충전돼요!<br>건강한 미디어 습관을 만들어보세요',
+            parentLogin: '부모님 로그인',
+            kidEntry: '아이 입장 (코드 입력)',
+            tryDemo: '체험하기 (로그인 없이)',
+            demoWarning: '체험 모드는 데이터가 저장되지 않습니다',
+            enterCode: '부모님이 만든 가족코드로 입장하세요',
+            familyCode: '가족코드',
+            enter: '입장하기',
+            familyCreated: '가족 코드 생성 완료!',
+            shareCode: '이 코드를 아이들에게 알려주세요!',
+            start: '시작하기',
+            familyCodeLabel: '가족코드:',
+            leave: '나가기',
+            logout: '로그아웃',
+            parentSettings: '부모 설정',
+            settingsComplete: '설정 완료 (잠금)',
+            rules: '약속을 지켜요!',
+            timeSettings: '시간 & 보너스 설정',
+            weekdayTime: '평일 기본시간 (분)',
+            weekendTime: '주말 기본시간 (분)',
+            weekdayBooks: '평일 최대 책 권수',
+            vacationBooks: '방학 최대 책 권수',
+            firstBonus: '첫 책 보너스 (쪽당 분)',
+            extraBonus: '추가 책 보너스 (쪽당 분)',
+            vacationStart: '방학 시작일',
+            vacationEnd: '방학 종료일',
+            remainingTime: '오늘 남은 유튜브 시간',
+            selectDate: '날짜 선택',
+            readingBonus: '독서 보너스 충전',
+            bookTitle: '책 제목',
+            pages: '쪽수',
+            review: '어떤 장면이 가장 기억에 남니?',
+            saveButton: '시간 저장 및 전송',
+            aboutTitle: '핑크냥 튜브타임이란?',
+            aboutDesc: '아이들의 건강한 미디어 습관을 위해 만들어진 가족용 앱입니다. 독서를 하면 유튜브 시청 시간이 충전되는 재미있는 보상 시스템으로, 아이들이 스스로 책을 읽고 싶어하게 만들어요!',
+            featuresTitle: '주요 기능',
+            features: '• 독서 시간에 따른 유튜브 보너스 시간 자동 계산<br>• 가족 코드로 부모-자녀 간 데이터 공유<br>• 캘린더로 독서 기록 한눈에 확인<br>• 귀여운 고양이 캐릭터로 재미있는 경험',
+            howToTitle: '이렇게 사용하세요',
+            howTo: '1. 부모님이 로그인하여 가족 코드 생성<br>2. 아이들에게 가족 코드 공유<br>3. 아이가 책을 읽으면 제목과 쪽수 입력<br>4. 자동으로 계산된 유튜브 시간 확인!',
+            privacy: '개인정보처리방침',
+            terms: '이용약관',
+            contact: '문의하기',
+            close: '닫기',
+            weekend: '주말',
+            vacation: '방학',
+            weekday: '평일'
+        },
+        en: {
+            title: 'PinkNyang TubeTime',
+            subtitle: 'Read books to charge YouTube time!<br>Build healthy media habits',
+            parentLogin: 'Parent Login',
+            kidEntry: 'Kid Entry (Enter Code)',
+            tryDemo: 'Try Demo (No Login)',
+            demoWarning: 'Demo mode: Data will not be saved',
+            enterCode: 'Enter the family code from your parents',
+            familyCode: 'Family Code',
+            enter: 'Enter',
+            familyCreated: 'Family Code Created!',
+            shareCode: 'Share this code with your children!',
+            start: 'Start',
+            familyCodeLabel: 'Family Code:',
+            leave: 'Leave',
+            logout: 'Logout',
+            parentSettings: 'Parent Settings',
+            settingsComplete: 'Done (Lock)',
+            rules: 'Keep our promises!',
+            timeSettings: 'Time & Bonus Settings',
+            weekdayTime: 'Weekday base time (min)',
+            weekendTime: 'Weekend base time (min)',
+            weekdayBooks: 'Max weekday books',
+            vacationBooks: 'Max vacation books',
+            firstBonus: 'First book bonus (min/page)',
+            extraBonus: 'Extra book bonus (min/page)',
+            vacationStart: 'Vacation start',
+            vacationEnd: 'Vacation end',
+            remainingTime: 'YouTube time remaining',
+            selectDate: 'Select date',
+            readingBonus: 'Reading Bonus',
+            bookTitle: 'Book title',
+            pages: 'Pages',
+            review: 'What scene was most memorable?',
+            saveButton: 'Save & Send',
+            aboutTitle: 'What is PinkNyang TubeTime?',
+            aboutDesc: 'A family app designed for healthy media habits. Children earn YouTube time by reading books - a fun reward system that motivates kids to read!',
+            featuresTitle: 'Key Features',
+            features: '• Auto-calculate YouTube bonus from reading<br>• Share data between parents and kids via family code<br>• Track reading history with calendar<br>• Cute cat characters for fun experience',
+            howToTitle: 'How to Use',
+            howTo: '1. Parent logs in to create family code<br>2. Share family code with children<br>3. Kids enter book title and pages read<br>4. Check automatically calculated YouTube time!',
+            privacy: 'Privacy Policy',
+            terms: 'Terms of Service',
+            contact: 'Contact Us',
+            close: 'Close',
+            weekend: 'Weekend',
+            vacation: 'Vacation',
+            weekday: 'Weekday'
+        },
+        ja: {
+            title: 'ピンクニャン チューブタイム',
+            subtitle: '本を読むとYouTube時間がチャージ！<br>健康的なメディア習慣を作ろう',
+            parentLogin: '保護者ログイン',
+            kidEntry: '子供入場（コード入力）',
+            tryDemo: 'お試し（ログインなし）',
+            demoWarning: 'お試しモード：データは保存されません',
+            enterCode: '保護者が作ったファミリーコードを入力',
+            familyCode: 'ファミリーコード',
+            enter: '入場',
+            familyCreated: 'ファミリーコード作成完了！',
+            shareCode: 'このコードをお子様に伝えてください！',
+            start: 'スタート',
+            familyCodeLabel: 'ファミリーコード:',
+            leave: '退出',
+            logout: 'ログアウト',
+            parentSettings: '保護者設定',
+            settingsComplete: '完了（ロック）',
+            rules: '約束を守ろう！',
+            timeSettings: '時間＆ボーナス設定',
+            weekdayTime: '平日基本時間（分）',
+            weekendTime: '週末基本時間（分）',
+            weekdayBooks: '平日最大冊数',
+            vacationBooks: '休暇最大冊数',
+            firstBonus: '最初の本ボーナス（分/ページ）',
+            extraBonus: '追加本ボーナス（分/ページ）',
+            vacationStart: '休暇開始日',
+            vacationEnd: '休暇終了日',
+            remainingTime: '残りYouTube時間',
+            selectDate: '日付選択',
+            readingBonus: '読書ボーナス',
+            bookTitle: '本のタイトル',
+            pages: 'ページ数',
+            review: '一番印象に残ったシーンは？',
+            saveButton: '保存＆送信',
+            aboutTitle: 'ピンクニャン チューブタイムとは？',
+            aboutDesc: '子供の健康的なメディア習慣のために作られたファミリーアプリです。読書でYouTube時間がもらえる楽しい報酬システム！',
+            featuresTitle: '主な機能',
+            features: '• 読書時間からYouTubeボーナスを自動計算<br>• ファミリーコードで親子間データ共有<br>• カレンダーで読書記録を確認<br>• かわいい猫キャラクターで楽しい体験',
+            howToTitle: '使い方',
+            howTo: '1. 保護者がログインしてファミリーコード作成<br>2. お子様にファミリーコードを共有<br>3. 子供が本のタイトルとページ数を入力<br>4. 自動計算されたYouTube時間を確認！',
+            privacy: 'プライバシーポリシー',
+            terms: '利用規約',
+            contact: 'お問い合わせ',
+            close: '閉じる',
+            weekend: '週末',
+            vacation: '休暇',
+            weekday: '平日'
+        },
+        zh: {
+            title: '粉红喵 管管时间',
+            subtitle: '读书就能充值YouTube时间！<br>培养健康的媒体习惯',
+            parentLogin: '家长登录',
+            kidEntry: '孩子入场（输入代码）',
+            tryDemo: '体验模式（无需登录）',
+            demoWarning: '体验模式：数据不会保存',
+            enterCode: '请输入家长创建的家庭代码',
+            familyCode: '家庭代码',
+            enter: '进入',
+            familyCreated: '家庭代码创建成功！',
+            shareCode: '请把这个代码告诉孩子们！',
+            start: '开始',
+            familyCodeLabel: '家庭代码:',
+            leave: '离开',
+            logout: '退出登录',
+            parentSettings: '家长设置',
+            settingsComplete: '完成（锁定）',
+            rules: '遵守我们的约定！',
+            timeSettings: '时间和奖励设置',
+            weekdayTime: '工作日基本时间（分钟）',
+            weekendTime: '周末基本时间（分钟）',
+            weekdayBooks: '工作日最多书籍数',
+            vacationBooks: '假期最多书籍数',
+            firstBonus: '第一本书奖励（分钟/页）',
+            extraBonus: '额外书籍奖励（分钟/页）',
+            vacationStart: '假期开始',
+            vacationEnd: '假期结束',
+            remainingTime: '今日剩余YouTube时间',
+            selectDate: '选择日期',
+            readingBonus: '阅读奖励',
+            bookTitle: '书名',
+            pages: '页数',
+            review: '哪个场景最让你印象深刻？',
+            saveButton: '保存并发送',
+            aboutTitle: '什么是粉红喵管管时间？',
+            aboutDesc: '专为培养孩子健康媒体习惯设计的家庭应用。通过阅读获得YouTube时间的有趣奖励系统！',
+            featuresTitle: '主要功能',
+            features: '• 根据阅读时间自动计算YouTube奖励<br>• 通过家庭代码共享父母和孩子之间的数据<br>• 用日历查看阅读记录<br>• 可爱的猫咪角色带来有趣体验',
+            howToTitle: '使用方法',
+            howTo: '1. 家长登录创建家庭代码<br>2. 与孩子分享家庭代码<br>3. 孩子输入书名和页数<br>4. 查看自动计算的YouTube时间！',
+            privacy: '隐私政策',
+            terms: '服务条款',
+            contact: '联系我们',
+            close: '关闭',
+            weekend: '周末',
+            vacation: '假期',
+            weekday: '工作日'
+        }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'ko';
+
+    function setLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('lang', lang);
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.textContent.includes(lang === 'ko' ? '한국어' : lang === 'en' ? 'English' : lang === 'ja' ? '日本語' : '中文'));
+        });
+        applyTranslations();
+    }
+
+    function t(key) {
+        return translations[currentLang][key] || translations['ko'][key] || key;
+    }
+
+    function applyTranslations() {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = t(key);
+            } else {
+                el.innerHTML = t(key);
+            }
+        });
+    }
+
+    // 페이지 로드 시 언어 적용
+    document.addEventListener('DOMContentLoaded', () => {
+        setLang(currentLang);
+    });
 </script>
 
 <script>
