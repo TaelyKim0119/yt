@@ -116,26 +116,31 @@
 <body>
 
 <div class="container">
-    <!-- 로그인 화면 -->
+    <!-- 시작 화면 -->
     <div class="login-screen">
         <img src="file (45).png">
         <h1>핑크냥 튜브타임</h1>
         <button class="login-btn google" onclick="loginWithGoogle()">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> Google로 시작하기
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> 부모님 로그인
         </button>
-        <button class="login-btn anon" onclick="loginAnonymously()">
-            🔒 로그인 없이 사용하기
+        <button class="login-btn anon" onclick="showKidsCodeEntry()">
+            🧒 아이 입장 (코드 입력)
         </button>
-        <p style="color:#aaa; font-size:0.9rem; margin-top:20px;">로그인하면 여러 기기에서 동기화됩니다</p>
+        <div id="kids-code-area" style="display:none; margin-top:20px; text-align:center;">
+            <input type="text" id="kids-family-code" class="family-code-input" placeholder="가족코드" maxlength="6">
+            <br><br>
+            <button class="family-btn primary" onclick="kidsJoinFamily()">입장하기</button>
+        </div>
+        <p style="color:#aaa; font-size:0.9rem; margin-top:20px;">부모님이 만든 가족코드로 입장하세요</p>
     </div>
 
-    <!-- 가족 설정 화면 -->
+    <!-- 가족 설정 화면 (부모 로그인 후) -->
     <div class="family-screen">
         <img src="file (45).png">
         <h2>가족 설정</h2>
-        <p>가족 코드로 데이터를 공유하세요!<br>부모님이 만든 코드를 입력하면<br>같은 데이터를 사용할 수 있어요.</p>
-        <button class="family-btn primary" onclick="createFamily()">👨‍👩‍👧‍👦 새 가족 만들기 (부모용)</button>
-        <button class="family-btn" onclick="showJoinFamily()">🔑 가족 코드 입력하기</button>
+        <p>가족 코드를 만들어서<br>아이들에게 알려주세요!</p>
+        <button class="family-btn primary" onclick="createFamily()">👨‍👩‍👧‍👦 새 가족 만들기</button>
+        <button class="family-btn" onclick="showJoinFamily()">🔑 기존 가족 코드 입력</button>
         <div id="join-family-area" style="display:none; margin-top:20px; text-align:center;">
             <input type="text" id="family-code-input" class="family-code-input" placeholder="ABC123" maxlength="6">
             <br><br>
@@ -265,18 +270,35 @@
     let familyCode = null;
     const CAT_IMAGES = ['file (16).png', 'file (18).png', 'file (41).png', 'file (45).png'];
 
-    // 인증 상태 감지
+    // 페이지 로드 시 저장된 가족코드 확인 (아이용 자동 입장)
+    window.addEventListener('load', async () => {
+        const saved = localStorage.getItem('familyCode');
+        if (saved && !currentUser) {
+            try {
+                const doc = await db.collection('families').doc(saved).get();
+                if (doc.exists) {
+                    familyCode = saved;
+                    document.body.classList.add('logged-in', 'has-family');
+                    document.getElementById('display-family-code').innerText = familyCode;
+                    document.getElementById('user-info').style.display = 'none';
+                    init();
+                }
+            } catch (e) {
+                console.log('자동 입장 실패:', e);
+            }
+        }
+    });
+
+    // 인증 상태 감지 (부모 Google 로그인용)
     auth.onAuthStateChanged(async user => {
         currentUser = user;
         if (user) {
             document.body.classList.add('logged-in');
-            if (!user.isAnonymous) {
-                document.getElementById('user-info').style.display = 'flex';
-                document.getElementById('user-photo').src = user.photoURL || 'file (45).png';
-                document.getElementById('user-name').innerText = user.displayName || '사용자';
-            }
-            // 가족 코드 확인
-            await checkFamilyCode();
+            document.getElementById('user-info').style.display = 'flex';
+            document.getElementById('user-photo').src = user.photoURL || 'file (45).png';
+            document.getElementById('user-name').innerText = user.displayName || '사용자';
+            // 부모 계정에서 가족 코드 확인
+            await checkParentFamilyCode();
         } else {
             document.body.classList.remove('logged-in');
             document.body.classList.remove('has-family');
@@ -285,19 +307,67 @@
         }
     });
 
-    // 가족 코드 확인
-    async function checkFamilyCode() {
-        const saved = localStorage.getItem('familyCode');
-        if (saved) {
-            // Firestore에서 가족 존재 확인
-            const doc = await db.collection('families').doc(saved).get();
-            if (doc.exists) {
-                familyCode = saved;
-                document.body.classList.add('has-family');
-                document.getElementById('display-family-code').innerText = familyCode;
-                init();
+    // 아이용 코드 입력 표시
+    function showKidsCodeEntry() {
+        document.getElementById('kids-code-area').style.display = 'block';
+    }
+
+    // 아이가 코드로 입장 (로그인 없이)
+    async function kidsJoinFamily() {
+        const code = document.getElementById('kids-family-code').value.toUpperCase().trim();
+        if (code.length !== 6) {
+            alert('6자리 가족코드를 입력해주세요!');
+            return;
+        }
+        try {
+            const doc = await db.collection('families').doc(code).get();
+            if (!doc.exists) {
+                alert('존재하지 않는 가족코드입니다!');
                 return;
             }
+            familyCode = code;
+            localStorage.setItem('familyCode', code);
+            document.body.classList.add('logged-in', 'has-family');
+            document.getElementById('display-family-code').innerText = familyCode;
+            document.getElementById('user-info').style.display = 'none'; // 아이는 로그인 정보 안 보임
+            init();
+        } catch (e) {
+            alert('입장 실패: ' + e.message);
+        }
+    }
+
+    // 부모 계정에서 가족 코드 확인
+    async function checkParentFamilyCode() {
+        try {
+            // 1. 먼저 Firestore 사용자 문서에서 가족코드 확인
+            const userDoc = await db.collection('users').doc(currentUser.uid).get();
+            if (userDoc.exists && userDoc.data().familyCode) {
+                const code = userDoc.data().familyCode;
+                // 가족이 실제로 존재하는지 확인
+                const familyDoc = await db.collection('families').doc(code).get();
+                if (familyDoc.exists) {
+                    familyCode = code;
+                    localStorage.setItem('familyCode', code);
+                    document.body.classList.add('has-family');
+                    document.getElementById('display-family-code').innerText = familyCode;
+                    init();
+                    return;
+                }
+            }
+            // 2. localStorage 확인 (백업)
+            const saved = localStorage.getItem('familyCode');
+            if (saved) {
+                const doc = await db.collection('families').doc(saved).get();
+                if (doc.exists) {
+                    familyCode = saved;
+                    document.body.classList.add('has-family');
+                    document.getElementById('display-family-code').innerText = familyCode;
+                    init();
+                    return;
+                }
+            }
+        } catch (e) {
+            console.log('가족코드 확인 실패:', e);
         }
         document.body.classList.remove('has-family');
     }
@@ -312,8 +382,12 @@
         return code;
     }
 
-    // 새 가족 만들기
+    // 새 가족 만들기 (부모 전용)
     async function createFamily() {
+        if (!currentUser) {
+            alert('먼저 로그인해주세요!');
+            return;
+        }
         const code = generateFamilyCode();
         try {
             // Firestore에 가족 생성
@@ -321,6 +395,12 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 createdBy: currentUser.uid
             });
+            // 부모 계정에 가족코드 저장 (자동 복구용)
+            await db.collection('users').doc(currentUser.uid).set({
+                familyCode: code,
+                email: currentUser.email,
+                displayName: currentUser.displayName
+            }, { merge: true });
             familyCode = code;
             localStorage.setItem('familyCode', code);
             document.getElementById('new-family-code').innerText = code;
@@ -337,7 +417,7 @@
         document.getElementById('join-family-area').style.display = 'block';
     }
 
-    // 가족 참여
+    // 가족 참여 (부모가 기존 가족코드로 참여)
     async function joinFamily() {
         const code = document.getElementById('family-code-input').value.toUpperCase().trim();
         if (code.length !== 6) {
@@ -349,6 +429,14 @@
             if (!doc.exists) {
                 alert('존재하지 않는 가족 코드입니다!');
                 return;
+            }
+            // 부모 계정에 가족코드 저장
+            if (currentUser) {
+                await db.collection('users').doc(currentUser.uid).set({
+                    familyCode: code,
+                    email: currentUser.email,
+                    displayName: currentUser.displayName
+                }, { merge: true });
             }
             familyCode = code;
             localStorage.setItem('familyCode', code);
@@ -389,23 +477,12 @@
         });
     }
 
-    // 익명 로그인
-    function loginAnonymously() {
-        auth.signInAnonymously().catch(err => {
-            alert('로그인 실패: ' + err.message);
-        });
-    }
 
     // 로그아웃
     function logout() {
         if (confirm('로그아웃 하시겠습니까?')) {
             auth.signOut();
         }
-    }
-
-    // 사용자 ID 가져오기
-    function getUserId() {
-        return currentUser ? currentUser.uid : 'local';
     }
 
     let currentChild = 'child1';
@@ -598,7 +675,7 @@
     async function init() { loadSavedImages(); renderChildNames(); renderRules(); renderSettings(); await loadCloudData(); selectDate(selectedDate); }
 
     async function loadCloudData() {
-        if (!currentUser || !familyCode) return;
+        if (!familyCode) return;
         try {
             const doc = await db.collection('families').doc(familyCode)
                 .collection('children').doc(currentChild).get();
@@ -707,7 +784,7 @@
         const record = { totalTime: (baseMins + mins) * 60, books: books.join(', '), review: document.getElementById('review').value };
 
         try {
-            if (!currentUser || !familyCode) throw new Error('로그인 또는 가족 설정 필요');
+            if (!familyCode) throw new Error('가족 코드가 필요합니다');
             cloudData[selectedDate] = record;
             await db.collection('families').doc(familyCode)
                 .collection('children').doc(currentChild)
