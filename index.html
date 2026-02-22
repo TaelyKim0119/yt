@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>서하 & 서준 방학 대시보드</title>
+    <title>핑크냥 튜브타임</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap');
         body { font-family: 'Gaegu', cursive; background-color: #fff9eb; margin: 0; padding: 15px; display: flex; justify-content: center; }
@@ -15,17 +15,37 @@
         
         .header h1 { text-align: center; color: #6c5ce7; font-size: 2.2rem; margin: 10px 0; }
         .rule-box { background: #fff5f5; border: 2px solid #ff7675; border-radius: 15px; padding: 15px; margin-bottom: 20px; font-size: 1.1rem; line-height: 1.6; }
+        .rule-item { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .rule-item input { flex: 1; border: 1px dashed #ff7675; background: transparent; font-size: 1.1rem; padding: 5px; border-radius: 8px; }
+        .rule-item button { background: #ff7675; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; }
+        .add-rule-btn { background: #ff7675; color: white; border: none; border-radius: 12px; padding: 8px 15px; cursor: pointer; font-family: 'Gaegu'; font-size: 1rem; margin-top: 10px; }
+
+        /* 설정 섹션 */
+        .settings-section { background: #e8f5e9; border: 2px solid #81c784; border-radius: 15px; padding: 15px; margin-bottom: 20px; }
+        .settings-section h3 { margin: 0 0 15px 0; color: #388e3c; text-align: center; cursor: pointer; }
+        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .setting-item { display: flex; flex-direction: column; gap: 5px; }
+        .setting-item label { font-size: 0.95rem; color: #388e3c; }
+        .setting-item input { padding: 8px; border: 2px solid #81c784; border-radius: 10px; font-family: 'Gaegu'; font-size: 1rem; text-align: center; }
+        .settings-content { display: none; }
+        .settings-content.show { display: block; }
         
         /* 아이들 선택 버튼 (고양이 크게, 얼굴 삭제) */
         .child-selector { display: flex; gap: 15px; margin-bottom: 20px; }
         .btn-child { flex: 1; padding: 20px 10px; border: none; border-radius: 25px; font-size: 1.6rem; font-family: 'Gaegu'; cursor: pointer; background: #f0f0f0; transition: 0.3s; }
         .btn-child img { width: 100px; height: auto; margin-bottom: 10px; border-radius: 15px; transition: transform 0.3s ease; }
         .btn-child img.grow { transform: scale(2); }
-        .btn-child.active.seoha { background: #ff9ff3; color: white; box-shadow: 0 5px 0 #ef87e5; }
-        .btn-child.active.seojun { background: #48dbfb; color: white; box-shadow: 0 5px 0 #34c0e2; }
+        .btn-child.active.child1 { background: #ff9ff3; color: white; box-shadow: 0 5px 0 #ef87e5; }
+        .btn-child.active.child2 { background: #48dbfb; color: white; box-shadow: 0 5px 0 #34c0e2; }
+        .btn-child.active.child3 { background: #a29bfe; color: white; box-shadow: 0 5px 0 #8b82e8; }
 
-        .time-box { background: #2d3436; color: #55efc4; border-radius: 25px; padding: 20px; text-align: center; margin-bottom: 20px; border: 4px solid #636e72; }
+        .time-box { background: #2d3436; color: #55efc4; border-radius: 25px; padding: 20px; text-align: center; margin-bottom: 20px; border: 4px solid #636e72; position: relative; }
+        .time-label { color: #fff; font-size: 1.3rem; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .youtube-icon { width: 32px; height: 22px; background: #FF0000; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; }
+        .youtube-icon::after { content: ''; width: 0; height: 0; border-left: 8px solid white; border-top: 5px solid transparent; border-bottom: 5px solid transparent; margin-left: 2px; }
         .time-display { font-size: 4rem; font-weight: bold; }
+        .progress-bar { background: #636e72; border-radius: 10px; height: 12px; margin-top: 15px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #FF0000, #ff4d4d); height: 100%; border-radius: 10px; transition: width 0.3s ease; }
         
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: #f9f9f9; padding: 10px; border-radius: 15px; border: 2px solid #ddd; margin-bottom: 20px; }
         .day { height: 50px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #eee; position: relative; font-size: 1.2rem; }
@@ -41,48 +61,68 @@
         .calc-btn img { transition: transform 0.3s ease; }
         .calc-btn img.grow { transform: scale(2); }
 
-        /* 제휴문의 섹션 */
-        .partnership-section { margin-top: 30px; padding-top: 20px; border-top: 3px dashed #ddd; }
-        .partnership-section h3 { text-align: center; color: #6c5ce7; margin-bottom: 15px; }
-        .partnership-form { background: #f5f0ff; padding: 20px; border-radius: 20px; border: 2px solid #a29bfe; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; color: #6c5ce7; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 12px; font-family: 'Gaegu'; font-size: 1.1rem; box-sizing: border-box; }
-        .form-group textarea { min-height: 100px; resize: vertical; }
-        .submit-btn { width: 100%; padding: 15px; background: #a29bfe; color: white; border: none; border-radius: 20px; font-size: 1.4rem; font-family: 'Gaegu'; cursor: pointer; box-shadow: 0 4px 0 #8b82e8; transition: 0.2s; }
-        .submit-btn:hover { background: #8b82e8; }
-        .submit-btn:active { box-shadow: 0 2px 0 #7b72d8; transform: translateY(2px); }
-
-        /* 댓글 섹션 */
-        .comments-section { margin-top: 30px; padding-top: 20px; border-top: 3px dashed #ddd; }
-        .comments-section h3 { text-align: center; color: #6c5ce7; margin-bottom: 15px; }
-        #disqus_thread { background: #fafafa; padding: 15px; border-radius: 15px; }
     </style>
 </head>
 <body onload="init()">
 
 <div class="container">
-    <img src="file (45).png" class="main-cat"> <div class="header"><h1>서하 & 서준 방학 보드</h1></div>
+    <img src="file (45).png" class="main-cat"> <div class="header"><h1>핑크냥 튜브타임</h1></div>
     
     <div class="rule-box">
-        <b>🐾 약속을 지켜요!</b><br>
-        • 📖 <b>동시(짧은 시)</b>나 글밥 적은 책은 보너스 제외!<br>
-        • 📖 같은 책은 <b>3번까지만</b> 읽을 수 있어요!<br>
-        • 📺 <b>유튜브는 11시 이후</b> 시청 가능해요!
+        <b>🐾 약속을 지켜요!</b>
+        <div id="rules-container"></div>
+        <button class="add-rule-btn" onclick="addRule()">+ 규칙 추가</button>
+    </div>
+
+    <div class="settings-section">
+        <h3 onclick="toggleSettings()">⚙️ 시간 & 보너스 설정 ▼</h3>
+        <div id="settings-content" class="settings-content">
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label>평일 기본시간 (분)</label>
+                    <input type="number" id="set-weekday" value="130" onchange="saveSettings()">
+                </div>
+                <div class="setting-item">
+                    <label>주말 기본시간 (분)</label>
+                    <input type="number" id="set-weekend" value="210" onchange="saveSettings()">
+                </div>
+                <div class="setting-item">
+                    <label>평일 최대 책 권수</label>
+                    <input type="number" id="set-books-weekday" value="5" onchange="saveSettings()">
+                </div>
+                <div class="setting-item">
+                    <label>방학 최대 책 권수</label>
+                    <input type="number" id="set-books-vacation" value="3" onchange="saveSettings()">
+                </div>
+                <div class="setting-item">
+                    <label>첫 책 보너스 (쪽당 분)</label>
+                    <input type="number" id="set-bonus-first" value="1" step="0.1" onchange="saveSettings()">
+                </div>
+                <div class="setting-item">
+                    <label>추가 책 보너스 (쪽당 분)</label>
+                    <input type="number" id="set-bonus-extra" value="0.5" step="0.1" onchange="saveSettings()">
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="child-selector">
-        <button id="btn-seoha" class="btn-child active seoha" onclick="changeChild('서하')">
-            <img src="file (16).png"><br>서하
+        <button id="btn-child1" class="btn-child active child1" onclick="changeChild('아이1')">
+            <img id="img-child1" src="file (16).png" onclick="event.stopPropagation(); cycleImage('child1')"><br>아이1
         </button>
-        <button id="btn-seojun" class="btn-child seojun" onclick="changeChild('서준')">
-            <img src="file (18).png"><br>서준
+        <button id="btn-child2" class="btn-child child2" onclick="changeChild('아이2')">
+            <img id="img-child2" src="file (18).png" onclick="event.stopPropagation(); cycleImage('child2')"><br>아이2
+        </button>
+        <button id="btn-child3" class="btn-child child3" onclick="changeChild('아이3')">
+            <img id="img-child3" src="file (45).png" onclick="event.stopPropagation(); cycleImage('child3')"><br>아이3
         </button>
     </div>
 
     <div class="time-box">
-        <div id="selected-date-text" style="color:white; font-size:1.2rem;">날짜 선택</div>
+        <div id="selected-date-text" style="color:#aaa; font-size:1rem;">날짜 선택</div>
+        <div class="time-label"><span class="youtube-icon"></span> 오늘 남은 유튜브 시간</div>
         <div id="time-display" class="time-display">00:00:00</div>
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill" style="width: 100%;"></div></div>
     </div>
 
     <div id="calendar" class="calendar-grid"></div>
@@ -96,53 +136,124 @@
         </div>
     </div>
 
-    <div class="partnership-section">
-        <h3>📬 제휴문의</h3>
-        <form class="partnership-form" action="https://formspree.io/f/mbdakdqg" method="POST">
-            <div class="form-group">
-                <label for="name">이름 / 회사명</label>
-                <input type="text" id="name" name="name" placeholder="홍길동 / ABC 컴퍼니" required>
-            </div>
-            <div class="form-group">
-                <label for="email">이메일</label>
-                <input type="email" id="email" name="email" placeholder="example@email.com" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">연락처</label>
-                <input type="tel" id="phone" name="phone" placeholder="010-1234-5678">
-            </div>
-            <div class="form-group">
-                <label for="message">문의 내용</label>
-                <textarea id="message" name="message" placeholder="제휴 관련 문의사항을 적어주세요!" required></textarea>
-            </div>
-            <button type="submit" class="submit-btn">문의하기</button>
-        </form>
-    </div>
-
-    <div class="comments-section">
-        <h3>💬 댓글</h3>
-        <div id="disqus_thread"></div>
-    </div>
 </div>
 
 <script>
-    (function() {
-        var d = document, s = d.createElement('script');
-        s.src = 'https://emily-14.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-<script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjmvbO_JrfBxMawAbCCpbEoHWI5-A-bHuwRBvU2S8fdUMzoYfyGkahgYCLppSY27Ze/exec';
+    const CAT_IMAGES = ['file (16).png', 'file (18).png', 'file (41).png', 'file (45).png'];
 
-    let currentChild = '서하';
+    let currentChild = '아이1';
+
+    function cycleImage(childId) {
+        const img = document.getElementById('img-' + childId);
+        const currentSrc = img.src.split('/').pop();
+        const currentIndex = CAT_IMAGES.findIndex(f => currentSrc.includes(f.replace(/ /g, '%20')) || currentSrc.includes(f));
+        const nextIndex = (currentIndex + 1) % CAT_IMAGES.length;
+        img.src = CAT_IMAGES[nextIndex];
+        localStorage.setItem('catImg-' + childId, CAT_IMAGES[nextIndex]);
+    }
+
+    function loadSavedImages() {
+        ['child1', 'child2', 'child3'].forEach(childId => {
+            const saved = localStorage.getItem('catImg-' + childId);
+            if (saved) document.getElementById('img-' + childId).src = saved;
+        });
+    }
+
+    const DEFAULT_RULES = [
+        '📖 동시(짧은 시)나 글밥 적은 책은 보너스 제외!',
+        '📖 같은 책은 3번까지만 읽을 수 있어요!',
+        '📺 유튜브는 11시 이후 시청 가능해요!'
+    ];
+
+    function loadRules() {
+        const saved = localStorage.getItem('rules');
+        return saved ? JSON.parse(saved) : DEFAULT_RULES;
+    }
+
+    function saveRules(rules) {
+        localStorage.setItem('rules', JSON.stringify(rules));
+    }
+
+    function renderRules() {
+        const rules = loadRules();
+        const container = document.getElementById('rules-container');
+        container.innerHTML = rules.map((rule, i) => `
+            <div class="rule-item">
+                <span>•</span>
+                <input type="text" value="${rule}" onchange="updateRule(${i}, this.value)">
+                <button onclick="deleteRule(${i})">×</button>
+            </div>
+        `).join('');
+    }
+
+    function addRule() {
+        const rules = loadRules();
+        rules.push('새 규칙을 입력하세요');
+        saveRules(rules);
+        renderRules();
+    }
+
+    function updateRule(index, value) {
+        const rules = loadRules();
+        rules[index] = value;
+        saveRules(rules);
+    }
+
+    function deleteRule(index) {
+        const rules = loadRules();
+        rules.splice(index, 1);
+        saveRules(rules);
+        renderRules();
+    }
+
+    // 설정 관련
+    const DEFAULT_SETTINGS = {
+        weekdayMins: 130,
+        weekendMins: 210,
+        booksWeekday: 5,
+        booksVacation: 3,
+        bonusFirst: 1,
+        bonusExtra: 0.5
+    };
+
+    function loadSettings() {
+        const saved = localStorage.getItem('settings');
+        return saved ? JSON.parse(saved) : DEFAULT_SETTINGS;
+    }
+
+    function saveSettings() {
+        const settings = {
+            weekdayMins: parseInt(document.getElementById('set-weekday').value) || 130,
+            weekendMins: parseInt(document.getElementById('set-weekend').value) || 210,
+            booksWeekday: parseInt(document.getElementById('set-books-weekday').value) || 5,
+            booksVacation: parseInt(document.getElementById('set-books-vacation').value) || 3,
+            bonusFirst: parseFloat(document.getElementById('set-bonus-first').value) || 1,
+            bonusExtra: parseFloat(document.getElementById('set-bonus-extra').value) || 0.5
+        };
+        localStorage.setItem('settings', JSON.stringify(settings));
+        selectDate(selectedDate);
+    }
+
+    function renderSettings() {
+        const s = loadSettings();
+        document.getElementById('set-weekday').value = s.weekdayMins;
+        document.getElementById('set-weekend').value = s.weekendMins;
+        document.getElementById('set-books-weekday').value = s.booksWeekday;
+        document.getElementById('set-books-vacation').value = s.booksVacation;
+        document.getElementById('set-bonus-first').value = s.bonusFirst;
+        document.getElementById('set-bonus-extra').value = s.bonusExtra;
+    }
+
+    function toggleSettings() {
+        const content = document.getElementById('settings-content');
+        content.classList.toggle('show');
+    }
+
     let selectedDate = new Date().toISOString().split('T')[0];
     let cloudData = {};
 
-    async function init() { await loadCloudData(); selectDate(selectedDate); }
+    async function init() { loadSavedImages(); renderRules(); renderSettings(); await loadCloudData(); selectDate(selectedDate); }
 
     async function loadCloudData() {
         try {
@@ -181,9 +292,10 @@
         const dayNum = new Date(dateStr).getDay();
         const isWeekend = [0,6].includes(dayNum);
         const vacation = isVacation(dateStr);
-        
-        // 보너스 입력 칸 생성 (방학 평일은 3권, 그 외는 5권)
-        const maxBooks = (vacation && !isWeekend) ? 3 : 5;
+        const settings = loadSettings();
+
+        // 보너스 입력 칸 생성
+        const maxBooks = (vacation && !isWeekend) ? settings.booksVacation : settings.booksWeekday;
         const inputArea = document.getElementById('book-inputs');
         inputArea.innerHTML = '';
         for (let i = 1; i <= maxBooks; i++) {
@@ -203,7 +315,7 @@
                 }
             });
         } else {
-            updateDisplay((isWeekend ? 210 : 130) * 60);
+            updateDisplay((isWeekend ? settings.weekendMins : settings.weekdayMins) * 60);
         }
 
         document.getElementById('selected-date-text').innerText = `${dateStr} (${isWeekend ? '주말' : (vacation ? '방학' : '평일')})`;
@@ -215,6 +327,15 @@
         const h = Math.floor(s/3600).toString().padStart(2,'0');
         const m = Math.floor((s%3600)/60).toString().padStart(2,'0');
         document.getElementById('time-display').innerText = `${h}:${m}:00`;
+
+        // 진행바 업데이트
+        const settings = loadSettings();
+        const dayNum = new Date(selectedDate).getDay();
+        const isWeekend = [0,6].includes(dayNum);
+        const maxMins = (isWeekend ? settings.weekendMins : settings.weekdayMins) + 120; // 최대 보너스 예상치
+        const currentMins = s / 60;
+        const percent = Math.min((currentMins / maxMins) * 100, 100);
+        document.getElementById('progress-fill').style.width = percent + '%';
     }
 
     async function saveAndSend() {
@@ -222,16 +343,18 @@
         allCats.forEach(cat => cat.classList.add('grow'));
         setTimeout(() => allCats.forEach(cat => cat.classList.remove('grow')), 1000);
 
+        const settings = loadSettings();
         let mins = 0; let count = 0; let books = [];
         const inputs = document.querySelectorAll('.book-row').length;
         for (let i = 1; i <= inputs; i++) {
             const p = parseInt(document.getElementById(`p-${i}`).value);
             const t = document.getElementById(`t-${i}`).value;
-            if (p && t) { count++; mins += (count === 1) ? p : (p * 0.5); books.push(`${t}(${p}쪽)`); }
+            if (p && t) { count++; mins += (count === 1) ? (p * settings.bonusFirst) : (p * settings.bonusExtra); books.push(`${t}(${p}쪽)`); }
         }
         if (count === 0) return alert("책 제목과 쪽수를 입력해줘!");
-        
-        const baseMins = [0,6].includes(new Date(selectedDate).getDay()) ? 210 : 130;
+
+        const isWeekend = [0,6].includes(new Date(selectedDate).getDay());
+        const baseMins = isWeekend ? settings.weekendMins : settings.weekdayMins;
         const payload = { child: currentChild, date: selectedDate, totalTime: (baseMins + mins) * 60, books: books.join(', '), review: document.getElementById('review').value };
 
         try {
@@ -242,12 +365,13 @@
         } catch (e) { alert("전송 실패! 인터넷 연결을 확인해줘."); }
     }
 
-    async function changeChild(n) { 
-        currentChild = n; 
-        document.getElementById('btn-seoha').classList.toggle('active', n === '서하');
-        document.getElementById('btn-seojun').classList.toggle('active', n === '서준');
+    async function changeChild(n) {
+        currentChild = n;
+        document.getElementById('btn-child1').classList.toggle('active', n === '아이1');
+        document.getElementById('btn-child2').classList.toggle('active', n === '아이2');
+        document.getElementById('btn-child3').classList.toggle('active', n === '아이3');
         await loadCloudData();
-        selectDate(selectedDate); 
+        selectDate(selectedDate);
     }
 </script>
 </body>
