@@ -125,7 +125,7 @@
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> 부모님 로그인
         </button>
         <button class="login-btn anon" onclick="showKidsCodeEntry()">
-            🧒 아이 입장 (코드 입력)
+            <img src="file (16).png" style="width:32px; height:auto; border-radius:8px;"> 아이 입장 (코드 입력)
         </button>
         <div id="kids-code-area" style="display:none; margin-top:20px; text-align:center;">
             <input type="text" id="kids-family-code" class="family-code-input" placeholder="가족코드" maxlength="6">
@@ -133,7 +133,7 @@
             <button class="family-btn primary" onclick="kidsJoinFamily()">입장하기</button>
         </div>
         <button class="login-btn" onclick="useAnonymously()" style="border-color:#ffa502; margin-top:15px;">
-            👀 체험하기 (로그인 없이)
+            <img src="file (18).png" style="width:32px; height:auto; border-radius:8px;"> 체험하기 (로그인 없이)
         </button>
         <p style="color:#ff7675; font-size:0.85rem; margin-top:10px;">⚠️ 체험 모드는 데이터가 저장되지 않습니다</p>
         <p style="color:#aaa; font-size:0.9rem; margin-top:10px;">부모님이 만든 가족코드로 입장하세요</p>
@@ -266,7 +266,7 @@
 
     let currentUser = null;
     let familyCode = null;
-    const CAT_IMAGES = ['file (16).png', 'file (18).png', 'file (41).png', 'file (45).png'];
+    const CAT_IMAGES = ['file (16).png', 'file (18).png', 'file (22).png', 'file (23).png', 'file (24).png', 'file (31).png', 'file (36).png', 'file (41).png', 'file (43).png', 'file (45).png'];
 
     // 페이지 로드 시 저장된 가족코드 확인 (아이용 자동 입장)
     window.addEventListener('load', async () => {
