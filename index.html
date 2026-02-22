@@ -95,7 +95,22 @@
         .logout-btn { background: #ff7675; color: white; border: none; padding: 5px 12px; border-radius: 10px; cursor: pointer; font-family: 'Gaegu'; }
         .app-content { display: none; }
         body.logged-in .login-screen { display: none; }
-        body.logged-in .app-content { display: block; }
+        body.logged-in.has-family .app-content { display: block; }
+
+        /* 가족 설정 화면 */
+        .family-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; }
+        body.logged-in:not(.has-family) .family-screen { display: flex; }
+        .family-screen img { width: 120px; margin-bottom: 20px; }
+        .family-screen h2 { color: #6c5ce7; margin-bottom: 10px; }
+        .family-screen p { color: #888; margin-bottom: 30px; text-align: center; }
+        .family-btn { padding: 15px 30px; border: 2px solid #6c5ce7; border-radius: 20px; background: white; font-size: 1.1rem; font-family: 'Gaegu'; cursor: pointer; margin: 8px 0; width: 80%; max-width: 280px; transition: 0.2s; }
+        .family-btn:hover { background: #6c5ce7; color: white; }
+        .family-btn.primary { background: #6c5ce7; color: white; }
+        .family-btn.primary:hover { background: #5849c4; }
+        .family-code-display { background: #f5f0ff; border: 3px dashed #6c5ce7; border-radius: 15px; padding: 20px; margin: 20px 0; text-align: center; }
+        .family-code-display .code { font-size: 2.5rem; color: #6c5ce7; letter-spacing: 5px; font-weight: bold; }
+        .family-code-input { font-size: 1.5rem; text-align: center; letter-spacing: 3px; text-transform: uppercase; width: 200px; }
+        .family-info { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 8px 12px; background: #f5f0ff; border-radius: 15px; font-size: 0.9rem; color: #6c5ce7; }
     </style>
 </head>
 <body>
@@ -114,8 +129,34 @@
         <p style="color:#aaa; font-size:0.9rem; margin-top:20px;">로그인하면 여러 기기에서 동기화됩니다</p>
     </div>
 
+    <!-- 가족 설정 화면 -->
+    <div class="family-screen">
+        <img src="file (45).png">
+        <h2>가족 설정</h2>
+        <p>가족 코드로 데이터를 공유하세요!<br>부모님이 만든 코드를 입력하면<br>같은 데이터를 사용할 수 있어요.</p>
+        <button class="family-btn primary" onclick="createFamily()">👨‍👩‍👧‍👦 새 가족 만들기 (부모용)</button>
+        <button class="family-btn" onclick="showJoinFamily()">🔑 가족 코드 입력하기</button>
+        <div id="join-family-area" style="display:none; margin-top:20px; text-align:center;">
+            <input type="text" id="family-code-input" class="family-code-input" placeholder="ABC123" maxlength="6">
+            <br><br>
+            <button class="family-btn primary" onclick="joinFamily()">참여하기</button>
+        </div>
+        <div id="family-created-area" style="display:none;">
+            <div class="family-code-display">
+                <p style="margin:0 0 10px 0;">가족 코드</p>
+                <div class="code" id="new-family-code"></div>
+                <p style="margin:10px 0 0 0; font-size:0.9rem; color:#888;">이 코드를 아이들에게 알려주세요!</p>
+            </div>
+            <button class="family-btn primary" onclick="startApp()">시작하기</button>
+        </div>
+    </div>
+
     <!-- 앱 컨텐츠 -->
     <div class="app-content">
+    <div id="family-info" class="family-info">
+        🏠 가족코드: <strong id="display-family-code"></strong>
+        <button class="logout-btn" onclick="leaveFamily()" style="margin-left:auto;">나가기</button>
+    </div>
     <div id="user-info" class="user-info" style="display:none;">
         <img id="user-photo" src="">
         <span id="user-name"></span>
@@ -221,10 +262,11 @@
     const db = firebase.firestore();
 
     let currentUser = null;
+    let familyCode = null;
     const CAT_IMAGES = ['file (16).png', 'file (18).png', 'file (41).png', 'file (45).png'];
 
     // 인증 상태 감지
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged(async user => {
         currentUser = user;
         if (user) {
             document.body.classList.add('logged-in');
@@ -233,12 +275,111 @@
                 document.getElementById('user-photo').src = user.photoURL || 'file (45).png';
                 document.getElementById('user-name').innerText = user.displayName || '사용자';
             }
-            init();
+            // 가족 코드 확인
+            await checkFamilyCode();
         } else {
             document.body.classList.remove('logged-in');
+            document.body.classList.remove('has-family');
             document.getElementById('user-info').style.display = 'none';
+            familyCode = null;
         }
     });
+
+    // 가족 코드 확인
+    async function checkFamilyCode() {
+        const saved = localStorage.getItem('familyCode');
+        if (saved) {
+            // Firestore에서 가족 존재 확인
+            const doc = await db.collection('families').doc(saved).get();
+            if (doc.exists) {
+                familyCode = saved;
+                document.body.classList.add('has-family');
+                document.getElementById('display-family-code').innerText = familyCode;
+                init();
+                return;
+            }
+        }
+        document.body.classList.remove('has-family');
+    }
+
+    // 가족 코드 생성 (6자리 랜덤)
+    function generateFamilyCode() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+    }
+
+    // 새 가족 만들기
+    async function createFamily() {
+        const code = generateFamilyCode();
+        try {
+            // Firestore에 가족 생성
+            await db.collection('families').doc(code).set({
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                createdBy: currentUser.uid
+            });
+            familyCode = code;
+            localStorage.setItem('familyCode', code);
+            document.getElementById('new-family-code').innerText = code;
+            document.getElementById('family-created-area').style.display = 'block';
+            document.querySelector('.family-screen .primary').style.display = 'none';
+            document.querySelector('.family-screen button:not(.primary)').style.display = 'none';
+        } catch (e) {
+            alert('가족 생성 실패: ' + e.message);
+        }
+    }
+
+    // 가족 코드 입력 표시
+    function showJoinFamily() {
+        document.getElementById('join-family-area').style.display = 'block';
+    }
+
+    // 가족 참여
+    async function joinFamily() {
+        const code = document.getElementById('family-code-input').value.toUpperCase().trim();
+        if (code.length !== 6) {
+            alert('6자리 코드를 입력해주세요!');
+            return;
+        }
+        try {
+            const doc = await db.collection('families').doc(code).get();
+            if (!doc.exists) {
+                alert('존재하지 않는 가족 코드입니다!');
+                return;
+            }
+            familyCode = code;
+            localStorage.setItem('familyCode', code);
+            document.body.classList.add('has-family');
+            document.getElementById('display-family-code').innerText = familyCode;
+            init();
+        } catch (e) {
+            alert('참여 실패: ' + e.message);
+        }
+    }
+
+    // 앱 시작 (가족 생성 후)
+    function startApp() {
+        document.body.classList.add('has-family');
+        document.getElementById('display-family-code').innerText = familyCode;
+        init();
+    }
+
+    // 가족 나가기
+    function leaveFamily() {
+        if (confirm('가족에서 나가시겠습니까?\n다시 참여하려면 가족 코드가 필요합니다.')) {
+            localStorage.removeItem('familyCode');
+            familyCode = null;
+            document.body.classList.remove('has-family');
+            // 가족 화면 초기화
+            document.getElementById('join-family-area').style.display = 'none';
+            document.getElementById('family-created-area').style.display = 'none';
+            document.querySelector('.family-screen .primary').style.display = '';
+            document.querySelector('.family-screen button:not(.primary)').style.display = '';
+        }
+    }
 
     // Google 로그인
     function loginWithGoogle() {
@@ -457,9 +598,9 @@
     async function init() { loadSavedImages(); renderChildNames(); renderRules(); renderSettings(); await loadCloudData(); selectDate(selectedDate); }
 
     async function loadCloudData() {
-        if (!currentUser) return;
+        if (!currentUser || !familyCode) return;
         try {
-            const doc = await db.collection('users').doc(getUserId())
+            const doc = await db.collection('families').doc(familyCode)
                 .collection('children').doc(currentChild).get();
             cloudData = doc.exists ? doc.data().records || {} : {};
             renderCalendar();
@@ -566,9 +707,9 @@
         const record = { totalTime: (baseMins + mins) * 60, books: books.join(', '), review: document.getElementById('review').value };
 
         try {
-            if (!currentUser) throw new Error('로그인 필요');
+            if (!currentUser || !familyCode) throw new Error('로그인 또는 가족 설정 필요');
             cloudData[selectedDate] = record;
-            await db.collection('users').doc(getUserId())
+            await db.collection('families').doc(familyCode)
                 .collection('children').doc(currentChild)
                 .set({ records: cloudData }, { merge: true });
             alert(`🐾 저장 완료! 오늘도 멋진 독서였어!`);
