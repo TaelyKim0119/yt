@@ -63,11 +63,25 @@
         .calc-btn img { transition: transform 0.3s ease; }
         .calc-btn img.grow { transform: scale(2); }
 
+        /* 부모/아이 모드 */
+        .lock-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; opacity: 0.5; transition: 0.2s; }
+        .lock-btn:hover { opacity: 1; }
+        .lock-btn.unlocked { opacity: 1; }
+
+        /* 아이 모드에서 숨길 요소들 */
+        body:not(.parent-mode) .settings-section { display: none; }
+        body:not(.parent-mode) .add-rule-btn { display: none; }
+        body:not(.parent-mode) .rule-item button { display: none; }
+        body:not(.parent-mode) .rule-item input { border: none; pointer-events: none; background: transparent; }
+        body:not(.parent-mode) .child-name { pointer-events: none; cursor: default; }
+        body:not(.parent-mode) .child-name:hover { background: transparent; }
+        body:not(.parent-mode) .btn-child img { pointer-events: none; }
     </style>
 </head>
 <body onload="init()">
 
 <div class="container">
+    <button id="lock-btn" class="lock-btn" onclick="toggleParentMode()">🔒</button>
     <img src="file (45).png" class="main-cat"> <div class="header"><h1>핑크냥 튜브타임</h1></div>
     
     <div class="rule-box">
@@ -148,6 +162,46 @@
     const CAT_IMAGES = ['file (16).png', 'file (18).png', 'file (41).png', 'file (45).png'];
 
     let currentChild = 'child1';
+    let isParentMode = false;
+
+    // 부모 모드 관련
+    function loadPIN() {
+        return localStorage.getItem('parentPIN') || '1234';
+    }
+
+    function savePIN(pin) {
+        localStorage.setItem('parentPIN', pin);
+    }
+
+    function toggleParentMode() {
+        if (isParentMode) {
+            // 잠금
+            isParentMode = false;
+            document.body.classList.remove('parent-mode');
+            document.getElementById('lock-btn').innerText = '🔒';
+            document.getElementById('lock-btn').classList.remove('unlocked');
+        } else {
+            // PIN 입력
+            const pin = prompt('부모 PIN을 입력하세요:');
+            if (pin === loadPIN()) {
+                isParentMode = true;
+                document.body.classList.add('parent-mode');
+                document.getElementById('lock-btn').innerText = '🔓';
+                document.getElementById('lock-btn').classList.add('unlocked');
+
+                // PIN 변경 옵션
+                if (confirm('PIN을 변경하시겠습니까?')) {
+                    const newPIN = prompt('새 PIN을 입력하세요 (숫자 4자리 권장):');
+                    if (newPIN && newPIN.trim()) {
+                        savePIN(newPIN.trim());
+                        alert('PIN이 변경되었습니다!');
+                    }
+                }
+            } else if (pin !== null) {
+                alert('PIN이 틀렸습니다!');
+            }
+        }
+    }
 
     const DEFAULT_NAMES = { child1: '아이1', child2: '아이2', child3: '아이3' };
 
@@ -168,6 +222,7 @@
     }
 
     function editChildName(childId) {
+        if (!isParentMode) return;
         const names = loadChildNames();
         const newName = prompt('이름을 입력하세요:', names[childId]);
         if (newName && newName.trim()) {
@@ -178,6 +233,7 @@
     }
 
     function cycleImage(childId) {
+        if (!isParentMode) return;
         const img = document.getElementById('img-' + childId);
         const currentSrc = img.src.split('/').pop();
         const currentIndex = CAT_IMAGES.findIndex(f => currentSrc.includes(f.replace(/ /g, '%20')) || currentSrc.includes(f));
