@@ -68,9 +68,10 @@
         .calc-btn img.grow { transform: scale(2); }
 
         /* 부모/아이 모드 */
-        .lock-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer; opacity: 0.5; transition: 0.2s; }
-        .lock-btn:hover { opacity: 1; }
-        .lock-btn.unlocked { opacity: 1; }
+        .lock-btn { display: flex; align-items: center; gap: 8px; margin: 15px auto; padding: 12px 20px; background: #f5f5f5; border: 2px solid #ddd; border-radius: 20px; font-size: 1.2rem; font-family: 'Gaegu'; cursor: pointer; transition: 0.2s; }
+        .lock-btn:hover { background: #e0e0e0; border-color: #bbb; }
+        .lock-btn.unlocked { background: #e8f5e9; border-color: #81c784; }
+        .lock-btn span { font-size: 1rem; color: #666; }
 
         /* 아이 모드에서 숨길 요소들 */
         body:not(.parent-mode) .settings-section { display: none; }
@@ -131,7 +132,11 @@
             <br><br>
             <button class="family-btn primary" onclick="kidsJoinFamily()">입장하기</button>
         </div>
-        <p style="color:#aaa; font-size:0.9rem; margin-top:20px;">부모님이 만든 가족코드로 입장하세요</p>
+        <button class="login-btn" onclick="useAnonymously()" style="border-color:#ffa502; margin-top:15px;">
+            👀 체험하기 (로그인 없이)
+        </button>
+        <p style="color:#ff7675; font-size:0.85rem; margin-top:10px;">⚠️ 체험 모드는 데이터가 저장되지 않습니다</p>
+        <p style="color:#aaa; font-size:0.9rem; margin-top:10px;">부모님이 만든 가족코드로 입장하세요</p>
     </div>
 
     <!-- 가족 코드 화면 (부모 첫 로그인 시 자동 생성) -->
@@ -157,8 +162,11 @@
         <span id="user-name"></span>
         <button class="logout-btn" onclick="logout()">로그아웃</button>
     </div>
-    <button id="lock-btn" class="lock-btn" onclick="toggleParentMode()">🔒</button>
     <img src="file (45).png" class="main-cat"> <div class="header"><h1>핑크냥 튜브타임</h1></div>
+
+    <button id="lock-btn" class="lock-btn" onclick="toggleParentMode()">
+        🔒 <span>부모 설정</span>
+    </button>
     
     <div class="rule-box">
         <b>🐾 약속을 지켜요!</b>
@@ -319,11 +327,23 @@
             localStorage.setItem('familyCode', code);
             document.body.classList.add('logged-in', 'has-family');
             document.getElementById('display-family-code').innerText = familyCode;
-            document.getElementById('user-info').style.display = 'none'; // 아이는 로그인 정보 안 보임
+            document.getElementById('user-info').style.display = 'none';
+            document.getElementById('family-info').style.display = 'flex';
             init();
         } catch (e) {
             alert('입장 실패: ' + e.message);
         }
+    }
+
+    // 익명 체험 모드 (데이터 저장 안됨)
+    let isAnonymousMode = false;
+    function useAnonymously() {
+        isAnonymousMode = true;
+        familyCode = null;
+        document.body.classList.add('logged-in', 'has-family');
+        document.getElementById('user-info').style.display = 'none';
+        document.getElementById('family-info').innerHTML = '<span style="color:#ff7675;">👀 체험 모드 - 데이터가 저장되지 않습니다</span>';
+        init();
     }
 
     // 부모 계정에서 가족 코드 확인 (없으면 자동 생성)
@@ -446,31 +466,32 @@
     }
 
     function toggleParentMode() {
+        const lockBtn = document.getElementById('lock-btn');
         if (isParentMode) {
             // 잠금
             isParentMode = false;
             document.body.classList.remove('parent-mode');
-            document.getElementById('lock-btn').innerText = '🔒';
-            document.getElementById('lock-btn').classList.remove('unlocked');
+            lockBtn.innerHTML = '🔒 <span>부모 설정</span>';
+            lockBtn.classList.remove('unlocked');
         } else {
             // PIN 입력
-            const pin = prompt('부모 PIN을 입력하세요:');
+            const pin = prompt('부모 비밀번호를 입력하세요:');
             if (pin === loadPIN()) {
                 isParentMode = true;
                 document.body.classList.add('parent-mode');
-                document.getElementById('lock-btn').innerText = '🔓';
-                document.getElementById('lock-btn').classList.add('unlocked');
+                lockBtn.innerHTML = '🔓 <span>설정 완료 (잠금)</span>';
+                lockBtn.classList.add('unlocked');
 
                 // PIN 변경 옵션
-                if (confirm('PIN을 변경하시겠습니까?')) {
-                    const newPIN = prompt('새 PIN을 입력하세요 (숫자 4자리 권장):');
+                if (confirm('비밀번호를 변경하시겠습니까?')) {
+                    const newPIN = prompt('새 비밀번호를 입력하세요 (숫자 4자리 권장):');
                     if (newPIN && newPIN.trim()) {
                         savePIN(newPIN.trim());
-                        alert('PIN이 변경되었습니다!');
+                        alert('비밀번호가 변경되었습니다!');
                     }
                 }
             } else if (pin !== null) {
-                alert('PIN이 틀렸습니다!');
+                alert('비밀번호가 틀렸습니다!');
             }
         }
     }
@@ -732,7 +753,14 @@
         const record = { totalTime: (baseMins + mins) * 60, books: books.join(', '), review: document.getElementById('review').value };
 
         try {
-            if (!familyCode) throw new Error('가족 코드가 필요합니다');
+            if (isAnonymousMode || !familyCode) {
+                // 체험 모드: 화면에만 표시, 저장 안 함
+                cloudData[selectedDate] = record;
+                updateDisplay(record.totalTime);
+                renderCalendar();
+                alert(`👀 체험 모드!\n시간이 계산되었지만 저장되지 않습니다.\n저장하려면 부모님 로그인이 필요해요!`);
+                return;
+            }
             cloudData[selectedDate] = record;
             await db.collection('families').doc(familyCode)
                 .collection('children').doc(currentChild)
