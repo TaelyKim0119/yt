@@ -134,26 +134,16 @@
         <p style="color:#aaa; font-size:0.9rem; margin-top:20px;">부모님이 만든 가족코드로 입장하세요</p>
     </div>
 
-    <!-- 가족 설정 화면 (부모 로그인 후) -->
+    <!-- 가족 코드 화면 (부모 첫 로그인 시 자동 생성) -->
     <div class="family-screen">
         <img src="file (45).png">
-        <h2>가족 설정</h2>
-        <p>가족 코드를 만들어서<br>아이들에게 알려주세요!</p>
-        <button class="family-btn primary" onclick="createFamily()">👨‍👩‍👧‍👦 새 가족 만들기</button>
-        <button class="family-btn" onclick="showJoinFamily()">🔑 기존 가족 코드 입력</button>
-        <div id="join-family-area" style="display:none; margin-top:20px; text-align:center;">
-            <input type="text" id="family-code-input" class="family-code-input" placeholder="ABC123" maxlength="6">
-            <br><br>
-            <button class="family-btn primary" onclick="joinFamily()">참여하기</button>
+        <h2>가족 코드 생성 완료!</h2>
+        <div class="family-code-display">
+            <p style="margin:0 0 10px 0;">가족 코드</p>
+            <div class="code" id="new-family-code"></div>
+            <p style="margin:10px 0 0 0; font-size:0.9rem; color:#888;">이 코드를 아이들에게 알려주세요!</p>
         </div>
-        <div id="family-created-area" style="display:none;">
-            <div class="family-code-display">
-                <p style="margin:0 0 10px 0;">가족 코드</p>
-                <div class="code" id="new-family-code"></div>
-                <p style="margin:10px 0 0 0; font-size:0.9rem; color:#888;">이 코드를 아이들에게 알려주세요!</p>
-            </div>
-            <button class="family-btn primary" onclick="startApp()">시작하기</button>
-        </div>
+        <button class="family-btn primary" onclick="startApp()">시작하기</button>
     </div>
 
     <!-- 앱 컨텐츠 -->
@@ -336,7 +326,7 @@
         }
     }
 
-    // 부모 계정에서 가족 코드 확인
+    // 부모 계정에서 가족 코드 확인 (없으면 자동 생성)
     async function checkParentFamilyCode() {
         try {
             // 1. 먼저 Firestore 사용자 문서에서 가족코드 확인
@@ -366,10 +356,34 @@
                     return;
                 }
             }
+            // 3. 가족코드가 없으면 자동 생성
+            await autoCreateFamily();
         } catch (e) {
             console.log('가족코드 확인 실패:', e);
         }
-        document.body.classList.remove('has-family');
+    }
+
+    // 자동으로 가족 생성 (부모 첫 로그인 시)
+    async function autoCreateFamily() {
+        const code = generateFamilyCode();
+        try {
+            await db.collection('families').doc(code).set({
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                createdBy: currentUser.uid
+            });
+            await db.collection('users').doc(currentUser.uid).set({
+                familyCode: code,
+                email: currentUser.email,
+                displayName: currentUser.displayName
+            }, { merge: true });
+            familyCode = code;
+            localStorage.setItem('familyCode', code);
+            document.getElementById('new-family-code').innerText = code;
+            // 가족 코드 화면 표시 (has-family 없이)
+            document.body.classList.remove('has-family');
+        } catch (e) {
+            alert('가족 생성 실패: ' + e.message);
+        }
     }
 
     // 가족 코드 생성 (6자리 랜덤)
@@ -382,73 +396,7 @@
         return code;
     }
 
-    // 새 가족 만들기 (부모 전용)
-    async function createFamily() {
-        if (!currentUser) {
-            alert('먼저 로그인해주세요!');
-            return;
-        }
-        const code = generateFamilyCode();
-        try {
-            // Firestore에 가족 생성
-            await db.collection('families').doc(code).set({
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                createdBy: currentUser.uid
-            });
-            // 부모 계정에 가족코드 저장 (자동 복구용)
-            await db.collection('users').doc(currentUser.uid).set({
-                familyCode: code,
-                email: currentUser.email,
-                displayName: currentUser.displayName
-            }, { merge: true });
-            familyCode = code;
-            localStorage.setItem('familyCode', code);
-            document.getElementById('new-family-code').innerText = code;
-            document.getElementById('family-created-area').style.display = 'block';
-            document.querySelector('.family-screen .primary').style.display = 'none';
-            document.querySelector('.family-screen button:not(.primary)').style.display = 'none';
-        } catch (e) {
-            alert('가족 생성 실패: ' + e.message);
-        }
-    }
-
-    // 가족 코드 입력 표시
-    function showJoinFamily() {
-        document.getElementById('join-family-area').style.display = 'block';
-    }
-
-    // 가족 참여 (부모가 기존 가족코드로 참여)
-    async function joinFamily() {
-        const code = document.getElementById('family-code-input').value.toUpperCase().trim();
-        if (code.length !== 6) {
-            alert('6자리 코드를 입력해주세요!');
-            return;
-        }
-        try {
-            const doc = await db.collection('families').doc(code).get();
-            if (!doc.exists) {
-                alert('존재하지 않는 가족 코드입니다!');
-                return;
-            }
-            // 부모 계정에 가족코드 저장
-            if (currentUser) {
-                await db.collection('users').doc(currentUser.uid).set({
-                    familyCode: code,
-                    email: currentUser.email,
-                    displayName: currentUser.displayName
-                }, { merge: true });
-            }
-            familyCode = code;
-            localStorage.setItem('familyCode', code);
-            document.body.classList.add('has-family');
-            document.getElementById('display-family-code').innerText = familyCode;
-            init();
-        } catch (e) {
-            alert('참여 실패: ' + e.message);
-        }
-    }
-
-    // 앱 시작 (가족 생성 후)
+    // 앱 시작 (가족 코드 확인 후)
     function startApp() {
         document.body.classList.add('has-family');
         document.getElementById('display-family-code').innerText = familyCode;
