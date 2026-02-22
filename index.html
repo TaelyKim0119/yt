@@ -156,14 +156,14 @@
 
     <!-- 시작 화면 -->
     <div class="login-screen">
-        <img src="file (45).png">
+        <img src="file%20(45).png">
         <h1 data-i18n="title">핑크냥 튜브타임</h1>
         <p style="color:#666; font-size:1rem; margin-bottom:20px; text-align:center;" data-i18n="subtitle">책을 읽으면 유튜브 시간이 충전돼요!<br>건강한 미디어 습관을 만들어보세요</p>
         <button class="login-btn google" onclick="loginWithGoogle()">
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"> <span data-i18n="parentLogin">부모님 로그인</span>
         </button>
         <button class="login-btn anon" onclick="showKidsCodeEntry()">
-            <img src="file (16).png" style="width:32px; height:auto; border-radius:8px;"> <span data-i18n="kidEntry">아이 입장 (코드 입력)</span>
+            <img src="file%20(16).png" style="width:32px; height:auto; border-radius:8px;"> <span data-i18n="kidEntry">아이 입장 (코드 입력)</span>
         </button>
         <div id="kids-code-area" style="display:none; margin-top:20px; text-align:center;">
             <input type="text" id="kids-family-code" class="family-code-input" data-i18n="familyCode" placeholder="가족코드" maxlength="6">
@@ -171,7 +171,7 @@
             <button class="family-btn primary" onclick="kidsJoinFamily()" data-i18n="enter">입장하기</button>
         </div>
         <button class="login-btn" onclick="useAnonymously()" style="border-color:#ffa502; margin-top:15px;">
-            <img src="file (18).png" style="width:32px; height:auto; border-radius:8px;"> <span data-i18n="tryDemo">체험하기 (로그인 없이)</span>
+            <img src="file%20(18).png" style="width:32px; height:auto; border-radius:8px;"> <span data-i18n="tryDemo">체험하기 (로그인 없이)</span>
         </button>
         <p style="color:#ff7675; font-size:0.85rem; margin-top:10px;">⚠️ <span data-i18n="demoWarning">체험 모드는 데이터가 저장되지 않습니다</span></p>
         <p style="color:#aaa; font-size:0.9rem; margin-top:10px;" data-i18n="enterCode">부모님이 만든 가족코드로 입장하세요</p>
@@ -179,7 +179,7 @@
 
     <!-- 가족 코드 화면 (부모 첫 로그인 시 자동 생성) -->
     <div class="family-screen">
-        <img src="file (45).png">
+        <img src="file%20(45).png">
         <h2 data-i18n="familyCreated">가족 코드 생성 완료!</h2>
         <div class="family-code-display">
             <p style="margin:0 0 10px 0;" data-i18n="familyCodeLabel">가족 코드</p>
@@ -192,7 +192,7 @@
     <!-- 앱 컨텐츠 -->
     <div class="app-content">
     <div id="family-info" class="family-info">
-        <img src="file (23).png" style="width:20px; vertical-align:middle;"> <span data-i18n="familyCodeLabel">가족코드:</span> <strong id="display-family-code"></strong>
+        <img src="file%20(23).png" style="width:20px; vertical-align:middle;"> <span data-i18n="familyCodeLabel">가족코드:</span> <strong id="display-family-code"></strong>
         <button class="logout-btn" onclick="leaveFamily()" style="margin-left:auto;" data-i18n="leave">나가기</button>
     </div>
     <div id="user-info" class="user-info" style="display:none;">
@@ -200,16 +200,16 @@
         <span id="user-name"></span>
         <button class="logout-btn" onclick="logout()" data-i18n="logout">로그아웃</button>
     </div>
-    <img src="file (45).png" class="main-cat"> <div class="header"><h1 data-i18n="title">핑크냥 튜브타임</h1></div>
+    <img src="file%20(45).png" class="main-cat"> <div class="header"><h1 data-i18n="title">핑크냥 튜브타임</h1></div>
 
     <button id="lock-btn" class="lock-btn" onclick="toggleParentMode()">
-        <img src="file (45).png" style="width:24px; vertical-align:middle;"> <span data-i18n="parentSettings">부모 설정</span>
+        <img src="file%20(45).png" style="width:24px; vertical-align:middle;"> <span data-i18n="parentSettings">부모 설정</span>
     </button>
 
     <div class="rule-box">
-        <b><img src="file (24).png" style="width:22px; vertical-align:middle;"> <span data-i18n="rules">약속을 지켜요!</span></b>
+        <b><img src="file%20(24).png" style="width:22px; vertical-align:middle;"> <span data-i18n="rules">약속을 지켜요!</span></b>
         <div id="rules-container"></div>
-        <button class="add-rule-btn" onclick="addRule()">+ 규칙 추가</button>
+        <button class="add-rule-btn" onclick="addRule()" data-i18n="addRule">+ 규칙 추가</button>
     </div>
 
     <div class="settings-section">
@@ -254,15 +254,15 @@
 
     <div class="child-selector">
         <button id="btn-child1" class="btn-child active child1" onclick="changeChild('child1')">
-            <img id="img-child1" src="file (16).png" onclick="event.stopPropagation(); cycleImage('child1')"><br>
+            <img id="img-child1" src="file%20(16).png" onclick="event.stopPropagation(); cycleImage('child1')"><br>
             <span id="name-child1" class="child-name" onclick="event.stopPropagation(); editChildName('child1')">아이1</span>
         </button>
         <button id="btn-child2" class="btn-child child2" onclick="changeChild('child2')">
-            <img id="img-child2" src="file (18).png" onclick="event.stopPropagation(); cycleImage('child2')"><br>
+            <img id="img-child2" src="file%20(18).png" onclick="event.stopPropagation(); cycleImage('child2')"><br>
             <span id="name-child2" class="child-name" onclick="event.stopPropagation(); editChildName('child2')">아이2</span>
         </button>
         <button id="btn-child3" class="btn-child child3" onclick="changeChild('child3')">
-            <img id="img-child3" src="file (45).png" onclick="event.stopPropagation(); cycleImage('child3')"><br>
+            <img id="img-child3" src="file%20(45).png" onclick="event.stopPropagation(); cycleImage('child3')"><br>
             <span id="name-child3" class="child-name" onclick="event.stopPropagation(); editChildName('child3')">아이3</span>
         </button>
     </div>
@@ -277,26 +277,26 @@
     <div id="calendar" class="calendar-grid"></div>
 
     <div id="bonus-panel" style="display:none;">
-        <h3 id="bonus-title" style="margin: 0 0 10px 0; color: #6c5ce7; text-align: center;"><img src="file (31).png" style="width:28px; vertical-align:middle;"> <span data-i18n="readingBonus">독서 보너스 충전</span></h3>
+        <h3 id="bonus-title" style="margin: 0 0 10px 0; color: #6c5ce7; text-align: center;"><img src="file%20(31).png" style="width:28px; vertical-align:middle;"> <span data-i18n="readingBonus">독서 보너스 충전</span></h3>
         <div class="bonus-section">
             <div id="book-inputs"></div>
             <textarea id="review" style="width:100%; margin-top:10px;" data-i18n="review" placeholder="어떤 장면이 가장 기억에 남니?"></textarea>
-            <button class="calc-btn" onclick="saveAndSend()"><img src="file (41).png" style="width: 128px; height: auto; vertical-align: middle; margin-right: 8px;"><span data-i18n="saveButton">시간 저장 및 전송</span></button>
+            <button class="calc-btn" onclick="saveAndSend()"><img src="file%20(41).png" style="width: 128px; height: auto; vertical-align: middle; margin-right: 8px;"><span data-i18n="saveButton">시간 저장 및 전송</span></button>
         </div>
     </div>
 
     <!-- 사이트 소개 -->
     <div class="site-info">
-        <h3><img src="file (36).png" style="width:24px; vertical-align:middle;"> <span data-i18n="aboutTitle">핑크냥 튜브타임이란?</span></h3>
+        <h3><img src="file%20(36).png" style="width:24px; vertical-align:middle;"> <span data-i18n="aboutTitle">핑크냥 튜브타임이란?</span></h3>
         <p data-i18n="aboutDesc">아이들의 건강한 미디어 습관을 위해 만들어진 가족용 앱입니다. 독서를 하면 유튜브 시청 시간이 충전되는 재미있는 보상 시스템으로, 아이들이 스스로 책을 읽고 싶어하게 만들어요!</p>
 
-        <h3><img src="file (43).png" style="width:24px; vertical-align:middle;"> <span data-i18n="featuresTitle">주요 기능</span></h3>
+        <h3><img src="file%20(43).png" style="width:24px; vertical-align:middle;"> <span data-i18n="featuresTitle">주요 기능</span></h3>
         <p data-i18n="features">• 독서 시간에 따른 유튜브 보너스 시간 자동 계산<br>
         • 가족 코드로 부모-자녀 간 데이터 공유<br>
         • 캘린더로 독서 기록 한눈에 확인<br>
         • 귀여운 고양이 캐릭터로 재미있는 경험</p>
 
-        <h3><img src="file (41).png" style="width:24px; vertical-align:middle;"> <span data-i18n="howToTitle">이렇게 사용하세요</span></h3>
+        <h3><img src="file%20(41).png" style="width:24px; vertical-align:middle;"> <span data-i18n="howToTitle">이렇게 사용하세요</span></h3>
         <p data-i18n="howTo">1. 부모님이 로그인하여 가족 코드 생성<br>
         2. 아이들에게 가족 코드 공유<br>
         3. 아이가 책을 읽으면 제목과 쪽수 입력<br>
@@ -419,7 +419,14 @@
             close: '닫기',
             weekend: '주말',
             vacation: '방학',
-            weekday: '평일'
+            weekday: '평일',
+            child1: '아이1',
+            child2: '아이2',
+            child3: '아이3',
+            addRule: '+ 규칙 추가',
+            defaultRule1: '동시(짧은 시)나 글밥 적은 책은 보너스 제외!',
+            defaultRule2: '같은 책은 3번까지만 읽을 수 있어요!',
+            defaultRule3: '유튜브는 11시 이후 시청 가능해요!'
         },
         en: {
             title: 'PinkNyang TubeTime',
@@ -468,7 +475,14 @@
             close: 'Close',
             weekend: 'Weekend',
             vacation: 'Vacation',
-            weekday: 'Weekday'
+            weekday: 'Weekday',
+            child1: 'Child 1',
+            child2: 'Child 2',
+            child3: 'Child 3',
+            addRule: '+ Add Rule',
+            defaultRule1: 'Short poems or easy books do not count for bonus!',
+            defaultRule2: 'Same book can only be read up to 3 times!',
+            defaultRule3: 'YouTube is available after 11 AM!'
         },
         ja: {
             title: 'ピンクニャン チューブタイム',
@@ -517,7 +531,14 @@
             close: '閉じる',
             weekend: '週末',
             vacation: '休暇',
-            weekday: '平日'
+            weekday: '平日',
+            child1: '子供1',
+            child2: '子供2',
+            child3: '子供3',
+            addRule: '+ ルール追加',
+            defaultRule1: '短い詩や簡単な本はボーナス対象外！',
+            defaultRule2: '同じ本は3回まで！',
+            defaultRule3: 'YouTubeは11時以降に視聴可能！'
         },
         zh: {
             title: '粉红喵 管管时间',
@@ -566,7 +587,14 @@
             close: '关闭',
             weekend: '周末',
             vacation: '假期',
-            weekday: '工作日'
+            weekday: '工作日',
+            child1: '孩子1',
+            child2: '孩子2',
+            child3: '孩子3',
+            addRule: '+ 添加规则',
+            defaultRule1: '短诗或简单的书不算奖励！',
+            defaultRule2: '同一本书最多读3次！',
+            defaultRule3: 'YouTube在11点以后才能看！'
         }
     };
 
@@ -594,6 +622,15 @@
                 el.innerHTML = t(key);
             }
         });
+        // 아이 이름과 규칙이 기본값이면 번역 적용
+        if (typeof renderChildNames === 'function') {
+            const saved = localStorage.getItem('childNames');
+            if (!saved) renderChildNames();
+        }
+        if (typeof renderRules === 'function') {
+            const saved = localStorage.getItem('rules');
+            if (!saved) renderRules();
+        }
     }
 
     // 페이지 로드 시 언어 적용
@@ -618,7 +655,7 @@
 
     let currentUser = null;
     let familyCode = null;
-    const CAT_IMAGES = ['file (16).png', 'file (18).png', 'file (22).png', 'file (23).png', 'file (24).png', 'file (31).png', 'file (36).png', 'file (41).png', 'file (43).png', 'file (45).png'];
+    const CAT_IMAGES = ['file%20(16).png', 'file%20(18).png', 'file%20(22).png', 'file%20(23).png', 'file%20(24).png', 'file%20(31).png', 'file%20(36).png', 'file%20(41).png', 'file%20(43).png', 'file%20(45).png'];
 
     // 페이지 로드 시 저장된 가족코드 확인 (아이용 자동 입장)
     window.addEventListener('load', async () => {
@@ -645,7 +682,7 @@
         if (user) {
             document.body.classList.add('logged-in');
             document.getElementById('user-info').style.display = 'flex';
-            document.getElementById('user-photo').src = user.photoURL || 'file (45).png';
+            document.getElementById('user-photo').src = user.photoURL || 'file%20(45).png';
             document.getElementById('user-name').innerText = user.displayName || '사용자';
             // 부모 계정에서 가족 코드 확인
             await checkParentFamilyCode();
@@ -823,7 +860,7 @@
             // 잠금
             isParentMode = false;
             document.body.classList.remove('parent-mode');
-            lockBtn.innerHTML = '<img src="file (45).png" style="width:24px; vertical-align:middle;"> <span>부모 설정</span>';
+            lockBtn.innerHTML = '<img src="file%20(45).png" style="width:24px; vertical-align:middle;"> <span>부모 설정</span>';
             lockBtn.classList.remove('unlocked');
         } else {
             // PIN 입력
@@ -831,7 +868,7 @@
             if (pin === loadPIN()) {
                 isParentMode = true;
                 document.body.classList.add('parent-mode');
-                lockBtn.innerHTML = '<img src="file (16).png" style="width:24px; vertical-align:middle;"> <span>설정 완료 (잠금)</span>';
+                lockBtn.innerHTML = '<img src="file%20(16).png" style="width:24px; vertical-align:middle;"> <span>설정 완료 (잠금)</span>';
                 lockBtn.classList.add('unlocked');
 
                 // PIN 변경 옵션
@@ -848,11 +885,13 @@
         }
     }
 
-    const DEFAULT_NAMES = { child1: '아이1', child2: '아이2', child3: '아이3' };
+    function getDefaultNames() {
+        return { child1: t('child1'), child2: t('child2'), child3: t('child3') };
+    }
 
     function loadChildNames() {
         const saved = localStorage.getItem('childNames');
-        return saved ? JSON.parse(saved) : DEFAULT_NAMES;
+        return saved ? JSON.parse(saved) : getDefaultNames();
     }
 
     function saveChildNames(names) {
@@ -894,15 +933,17 @@
         });
     }
 
-    const DEFAULT_RULES = [
-        '📖 동시(짧은 시)나 글밥 적은 책은 보너스 제외!',
-        '📖 같은 책은 3번까지만 읽을 수 있어요!',
-        '📺 유튜브는 11시 이후 시청 가능해요!'
-    ];
+    function getDefaultRules() {
+        return [
+            t('defaultRule1'),
+            t('defaultRule2'),
+            t('defaultRule3')
+        ];
+    }
 
     function loadRules() {
         const saved = localStorage.getItem('rules');
-        return saved ? JSON.parse(saved) : DEFAULT_RULES;
+        return saved ? JSON.parse(saved) : getDefaultRules();
     }
 
     function saveRules(rules) {
@@ -1048,7 +1089,7 @@
         for (let i = 1; i <= maxBooks; i++) {
             inputArea.innerHTML += `<div class="book-row"><span>${i}</span><input type="text" id="t-${i}" placeholder="책 제목"><input type="number" id="p-${i}" placeholder="쪽수"></div>`;
         }
-        document.getElementById('bonus-title').innerHTML = `<img src="file (31).png" style="width:28px; vertical-align:middle;"> 독서 보너스 (${maxBooks}권 제한)`;
+        document.getElementById('bonus-title').innerHTML = `<img src="file%20(31).png" style="width:28px; vertical-align:middle;"> 독서 보너스 (${maxBooks}권 제한)`;
 
         const existing = cloudData[dateStr];
         if (existing) {
