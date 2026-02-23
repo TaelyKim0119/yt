@@ -20,7 +20,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
         body { font-family: 'Noto Sans KR', sans-serif; background-color: #fff9eb; margin: 0; padding: 15px; display: flex; justify-content: center; }
-        .container { background: white; width: 100%; max-width: 500px; border-radius: 30px; padding: 25px; border: 6px solid #ffcbef; box-shadow: 0 10px 0 #ff9ff3; position: relative; }
+        .container { background: white; width: 100%; max-width: 500px; border-radius: 30px; padding: 25px; padding-top: 50px; border: 6px solid #ffcbef; box-shadow: 0 10px 0 #ff9ff3; position: relative; }
         
         /* 메인 고양이 아이콘 (로케트 대신) */
         .main-cat { width: 160px; display: block; margin: 0 auto 10px; transition: transform 0.3s ease; }
@@ -137,8 +137,8 @@
         .modal-close { background: #6c5ce7; color: white; border: none; padding: 10px 25px; border-radius: 15px; font-family: 'Noto Sans KR', sans-serif; font-size: 1rem; cursor: pointer; margin-top: 15px; }
 
         /* 언어 선택 */
-        .lang-switch { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; }
-        .lang-btn { padding: 5px 10px; border: 1px solid #ddd; border-radius: 10px; background: white; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+        .lang-switch { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; z-index: 100; flex-wrap: wrap; justify-content: flex-end; max-width: 200px; }
+        .lang-btn { padding: 4px 8px; border: 1px solid #ddd; border-radius: 8px; background: white; cursor: pointer; font-size: 0.75rem; transition: 0.2s; }
         .lang-btn.active { background: #6c5ce7; color: white; border-color: #6c5ce7; }
         .lang-btn:hover { border-color: #6c5ce7; }
     </style>
@@ -285,7 +285,9 @@
         </div>
     </div>
 
-    <!-- 사이트 소개 -->
+    </div><!-- app-content 끝 -->
+
+    <!-- 사이트 소개 (항상 표시) -->
     <div class="site-info">
         <h3><img src="file%20(36).png" style="width:24px; vertical-align:middle;"> <span data-i18n="aboutTitle">핑크냥 튜브타임이란?</span></h3>
         <p data-i18n="aboutDesc">아이들의 건강한 미디어 습관을 위해 만들어진 가족용 앱입니다. 독서를 하면 유튜브 시청 시간이 충전되는 재미있는 보상 시스템으로, 아이들이 스스로 책을 읽고 싶어하게 만들어요!</p>
@@ -303,17 +305,40 @@
         4. 자동으로 계산된 유튜브 시간 확인!</p>
     </div>
 
-    <!-- 푸터 -->
+    <!-- 블로그 미리보기 (항상 표시) -->
+    <div class="site-info" style="background: #f5f0ff; border: 2px solid #6c5ce7;">
+        <h3><img src="file%20(41).png" style="width:24px; vertical-align:middle;"> <span data-i18n="blogTitle">육아 팁 & 앱 가이드</span></h3>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <a href="blog/screen-time-reading.html" style="display:block; padding:12px 15px; background:white; border-radius:12px; text-decoration:none; color:#333; border:1px solid #eee;">
+                <strong>아이 스크린타임 관리, 독서로 해결하는 5가지 방법</strong>
+                <p style="margin:5px 0 0 0; font-size:0.9rem; color:#888;">강제 제한 대신 자연스러운 미디어 균형 만들기</p>
+            </a>
+            <a href="blog/app-guide.html" style="display:block; padding:12px 15px; background:white; border-radius:12px; text-decoration:none; color:#333; border:1px solid #eee;">
+                <strong>핑크냥 튜브타임 완벽 가이드</strong>
+                <p style="margin:5px 0 0 0; font-size:0.9rem; color:#888;">처음 사용자를 위한 A to Z 안내</p>
+            </a>
+            <a href="blog/books-by-age.html" style="display:block; padding:12px 15px; background:white; border-radius:12px; text-decoration:none; color:#333; border:1px solid #eee;">
+                <strong>연령별 추천 도서</strong>
+                <p style="margin:5px 0 0 0; font-size:0.9rem; color:#888;">3세부터 12세까지 아이들을 위한 필독서</p>
+            </a>
+            <a href="blog/family-media-rules.html" style="display:block; padding:12px 15px; background:white; border-radius:12px; text-decoration:none; color:#333; border:1px solid #eee;">
+                <strong>가족 미디어 규칙 세우기</strong>
+                <p style="margin:5px 0 0 0; font-size:0.9rem; color:#888;">갈등 없이 함께 지키는 약속 만들기</p>
+            </a>
+        </div>
+        <a href="blog/index.html" style="display:inline-block; margin-top:15px; padding:10px 20px; background:#6c5ce7; color:white; border-radius:15px; text-decoration:none; font-weight:500;" data-i18n="viewAllPosts">블로그 전체 보기</a>
+    </div>
+
+    <!-- 푸터 (항상 표시) -->
     <div class="site-footer">
         <div class="footer-links">
+            <a href="blog/index.html" data-i18n="blog">블로그</a>
             <a href="#" onclick="showModal('privacy')" data-i18n="privacy">개인정보처리방침</a>
             <a href="#" onclick="showModal('terms')" data-i18n="terms">이용약관</a>
             <a href="mailto:pinknyang@example.com" data-i18n="contact">문의하기</a>
         </div>
         <p>© 2026 PinkNyang TubeTime. All rights reserved.</p>
     </div>
-
-    </div><!-- app-content 끝 -->
 </div>
 
 <!-- 개인정보처리방침 모달 -->
@@ -426,7 +451,10 @@
             addRule: '+ 규칙 추가',
             defaultRule1: '동시(짧은 시)나 글밥 적은 책은 보너스 제외!',
             defaultRule2: '같은 책은 3번까지만 읽을 수 있어요!',
-            defaultRule3: '유튜브는 11시 이후 시청 가능해요!'
+            defaultRule3: '유튜브는 11시 이후 시청 가능해요!',
+            blog: '블로그',
+            blogTitle: '육아 팁 & 앱 가이드',
+            viewAllPosts: '블로그 전체 보기'
         },
         en: {
             title: 'PinkNyang TubeTime',
@@ -482,7 +510,10 @@
             addRule: '+ Add Rule',
             defaultRule1: 'Short poems or easy books do not count for bonus!',
             defaultRule2: 'Same book can only be read up to 3 times!',
-            defaultRule3: 'YouTube is available after 11 AM!'
+            defaultRule3: 'YouTube is available after 11 AM!',
+            blog: 'Blog',
+            blogTitle: 'Parenting Tips & App Guide',
+            viewAllPosts: 'View All Posts'
         },
         ja: {
             title: 'ピンクニャン チューブタイム',
@@ -538,7 +569,10 @@
             addRule: '+ ルール追加',
             defaultRule1: '短い詩や簡単な本はボーナス対象外！',
             defaultRule2: '同じ本は3回まで！',
-            defaultRule3: 'YouTubeは11時以降に視聴可能！'
+            defaultRule3: 'YouTubeは11時以降に視聴可能！',
+            blog: 'ブログ',
+            blogTitle: '育児ヒント＆アプリガイド',
+            viewAllPosts: 'すべての記事を見る'
         },
         zh: {
             title: '粉红喵 管管时间',
@@ -594,7 +628,10 @@
             addRule: '+ 添加规则',
             defaultRule1: '短诗或简单的书不算奖励！',
             defaultRule2: '同一本书最多读3次！',
-            defaultRule3: 'YouTube在11点以后才能看！'
+            defaultRule3: 'YouTube在11点以后才能看！',
+            blog: '博客',
+            blogTitle: '育儿技巧和应用指南',
+            viewAllPosts: '查看所有文章'
         }
     };
 
